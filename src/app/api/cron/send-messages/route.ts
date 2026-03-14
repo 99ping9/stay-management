@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import crypto from "crypto";
@@ -15,26 +16,18 @@ function getSolapiAuthHeader(apiKey: string, apiSecret: string) {
     return `HMAC-SHA256 apiKey=${apiKey}, date=${date}, salt=${salt}, signature=${signature}`;
 }
 
-async function sendSolapiMessage(to: string, from: string, text: string, subjectTitle: string, imageUrl?: string) {
+async function sendSolapiMessage(to: string, from: string, text: string, subjectTitle: string) {
     const apiKey = process.env.SOLAPI_API_KEY!;
     const apiSecret = process.env.SOLAPI_API_SECRET!;
-
     const authHeader = getSolapiAuthHeader(apiKey, apiSecret);
 
-    // Note: if MMS, Solapi v4 requires imageId upload first.
-    // For simplicity in this implementation, if imageUrl exists and is a URL, 
-    // you need to either fetch the image and upload to solapi storage to get an image ID,
-    // or use an alternative method. Since Solapi requires file upload for MMS:
-    // We'll leave the image ID logic as a TODO or implement a basic text SMS logic here.
-    // MVP: Text SMS/LMS
-
-    const messagePayload = {
+    const messagePayload: any = {
         message: {
             to: to.replace(/[^0-9]/g, ""),
             from: from.replace(/[^0-9]/g, ""),
             text,
             subject: subjectTitle,
-            type: "SMS", // Solapi auto-detects LMS if text is long, but explicit types can be set
+            // type is omitted to allow Solapi auto-detection (SMS/LMS)
         }
     };
 
@@ -68,29 +61,30 @@ export async function GET(request: Request) {
         const { data: pendingMessages, error: fetchError } = await (supabase
             .from("scheduled_messages")
             .select(`
-        id,
-        scheduled_at,
-        reservation:reservations (
-          guest_name,
-          phone,
-          check_in,
-          check_out,
-          selected_options,
-          room:rooms (
-            name,
-            staff_members
-          ),
-          business:businesses (
-            contact_phone
-          )
-        ),
-        template:message_templates (
-          title,
-          content,
-          image_url,
-          recipient_type
-        )
-      `)
+                id,
+                scheduled_at,
+                reservation:reservations (
+                    id,
+                    guest_name,
+                    phone,
+                    check_in,
+                    check_out,
+                    selected_options,
+                    room:rooms (
+                        name,
+                        staff_members
+                    ),
+                    business:businesses (
+                        contact_phone
+                    )
+                ),
+                template:message_templates (
+                    id,
+                    title,
+                    content,
+                    recipient_type
+                )
+            `)
             .eq("status", "pending")
             .lte("scheduled_at", now)
             .limit(50) as any);
@@ -101,7 +95,7 @@ export async function GET(request: Request) {
         }
 
         if (!pendingMessages || pendingMessages.length === 0) {
-            return NextResponse.json({ message: "No pending messages." });
+            return NextResponse.json({ message: "No pending messages.", checked_at: now });
         }
 
         const results = [];
@@ -112,13 +106,13 @@ export async function GET(request: Request) {
             const tplData = msg.template;
             const adminPhone = resData?.business?.contact_phone;
             let text = tplData?.content || "";
-            const title = tplData?.title;
+            const title = tplData?.title || "알림톡";
             const recipientType = tplData?.recipient_type || 'guest';
 
             if (!resData || !text || !senderNumber) {
                 await supabase.from("scheduled_messages").update({
                     status: "failed",
-                    error_message: "Missing reservation, text, or senderNumber",
+                    error_message: "Missing essential data",
                     sent_at: new Date().toISOString()
                 }).eq("id", msg.id);
                 continue;
@@ -127,18 +121,22 @@ export async function GET(request: Request) {
             // --- Dynamic Placeholder Replacement ---
             const optList = (resData.selected_options || []).join(", ");
             const replacements: Record<string, string> = {
+                // New System Placeholders
                 "#{예약자명}": resData.guest_name || "",
                 "#{숙소명}": resData.room?.name || "",
                 "#{입실일}": resData.check_in || "",
                 "#{퇴실일}": resData.check_out || "",
                 "#{선택옵션}": optList.length > 0 ? optList : "없음",
+                // Legacy Chowon Placeholders
+                "{name}": resData.guest_name || "손님",
+                "{accommodation}": resData.room?.name || "",
+                "{checkin}": resData.check_in || "",
+                "{checkout}": resData.check_out || "",
             };
 
-            // Process all placeholders
             Object.entries(replacements).forEach(([key, val]) => {
                 text = text.split(key).join(val);
             });
-            // ----------------------------------------
 
             // Determine recipient phone numbers
             let recipients: string[] = [];
@@ -158,7 +156,6 @@ export async function GET(request: Request) {
                 continue;
             }
 
-            // Try sending SMS via Solapi for each recipient
             let allOk = true;
             const errors = [];
 
@@ -183,13 +180,12 @@ export async function GET(request: Request) {
                     sent_at: new Date().toISOString()
                 }).eq("id", msg.id);
 
-                // Fallback: Notify Admin about Failure
                 if (adminPhone) {
                     await sendSolapiMessage(
                         adminPhone,
                         senderNumber,
-                        `[ChowonSMS 시스템알림]\n문자 발송 실패!\n예약자: ${resData.guest_name}\n대상: ${recipientType}\n오류: 확인 요망`,
-                        "발송실패 알림"
+                        `[알림] 발송 실패\n예약자: ${resData.guest_name}\n오류내용은 로그를 확인해주세요.`,
+                        "발송실패"
                     );
                 }
                 results.push({ id: msg.id, status: "failed", errors });

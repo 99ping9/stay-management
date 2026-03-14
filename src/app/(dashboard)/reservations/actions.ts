@@ -16,13 +16,13 @@ async function sendSolapiMessage(to: string, from: string, text: string, subject
     const apiSecret = process.env.SOLAPI_API_SECRET!;
     const authHeader = getSolapiAuthHeader(apiKey, apiSecret);
 
-    const messagePayload = {
+    const messagePayload: any = {
         message: {
             to: to.replace(/[^0-9]/g, ""),
             from: from.replace(/[^0-9]/g, ""),
             text,
             subject: subjectTitle,
-            type: "SMS",
+            // type is omitted to allow Solapi auto-detection (SMS/LMS)
         }
     };
 
@@ -180,6 +180,7 @@ export async function createReservationAction(formData: {
 
     if (!business) return { error: "업체 정보를 찾을 수 없습니다." };
 
+    // 1. Create Reservation
     const { data: reservation, error: resError } = await adminSupabase
         .from("reservations")
         .insert({
@@ -199,6 +200,7 @@ export async function createReservationAction(formData: {
         return { error: "예약 등록 실패: " + (resError?.message || "알 수 없는 오류") };
     }
 
+    // 2. Fetch Active Templates for this room
     const { data: templates } = await adminSupabase
         .from("message_templates")
         .select("*")
@@ -206,21 +208,53 @@ export async function createReservationAction(formData: {
         .eq("is_active", true);
 
     if (templates && templates.length > 0) {
-        const messagesToSchedule = templates.map(tpl => {
-            const baseDate = tpl.trigger_type === 'checkout' ? reservation.check_out : reservation.check_in;
-            const scheduledAt = new Date(`${baseDate}T${tpl.send_time}`).toISOString();
+        const messagesToSchedule: any[] = [];
+        const checkIn = new Date(reservation.check_in);
+        const checkOut = new Date(reservation.check_out);
 
-            return {
-                reservation_id: reservation.id,
-                template_id: tpl.id,
-                scheduled_at: scheduledAt,
-                status: 'pending'
-            };
+        templates.forEach(tpl => {
+            if (tpl.trigger_type === 'checkin') {
+                // Schedule for check-in day
+                const scheduledAt = new Date(`${reservation.check_in}T${tpl.send_time}+09:00`).toISOString();
+                messagesToSchedule.push({
+                    reservation_id: reservation.id,
+                    template_id: tpl.id,
+                    scheduled_at: scheduledAt,
+                    status: 'pending'
+                });
+            } else if (tpl.trigger_type === 'checkout') {
+                // Schedule for check-out day
+                const scheduledAt = new Date(`${reservation.check_out}T${tpl.send_time}+09:00`).toISOString();
+                messagesToSchedule.push({
+                    reservation_id: reservation.id,
+                    template_id: tpl.id,
+                    scheduled_at: scheduledAt,
+                    status: 'pending'
+                });
+            } else if (tpl.trigger_type === 'multinight') {
+                // Schedule for every day between check-in and check-out (exclusive)
+                let current = new Date(checkIn);
+                current.setDate(current.getDate() + 1);
+                
+                while (current < checkOut) {
+                    const dateStr = current.toISOString().split('T')[0];
+                    const scheduledAt = new Date(`${dateStr}T${tpl.send_time}+09:00`).toISOString();
+                    messagesToSchedule.push({
+                        reservation_id: reservation.id,
+                        template_id: tpl.id,
+                        scheduled_at: scheduledAt,
+                        status: 'pending'
+                    });
+                    current.setDate(current.getDate() + 1);
+                }
+            }
         });
 
-        const { error: scheduleError } = await adminSupabase.from("scheduled_messages").insert(messagesToSchedule);
-        if (scheduleError) {
-            console.error("Scheduling error:", scheduleError);
+        if (messagesToSchedule.length > 0) {
+            const { error: scheduleError } = await adminSupabase.from("scheduled_messages").insert(messagesToSchedule);
+            if (scheduleError) {
+                console.error("Scheduling error:", scheduleError);
+            }
         }
     }
 

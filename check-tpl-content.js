@@ -6,9 +6,9 @@ const supabase = createClient(
 );
 
 async function check() {
-  const { data } = await supabase.from('message_templates').select('*');
-  for (const t of data) {
-    console.log(`ID: ${t.id} | Room: ${t.room_id} | Active: ${t.is_active} | Trigger: ${t.trigger_type} | Title: ${t.title}`);
+  const { data } = await supabase.from('message_templates').select('content').limit(1);
+  if (data && data.length > 0) {
+    console.log('Template Content:', data[0].content);
   }
 }
 
