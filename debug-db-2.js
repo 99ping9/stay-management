@@ -6,20 +6,22 @@ const supabase = createClient(
 );
 
 async function check() {
-  console.log('--- Latest Reservations ---');
-  const { data, error } = await supabase
+  const { data: messages, error } = await supabase
+    .from('scheduled_messages')
+    .select('count', { count: 'exact' });
+  console.log('Total scheduled messages:', messages);
+  
+  const { data: recent, error: err2 } = await supabase
     .from('scheduled_messages')
     .select('*')
-    .limit(20);
-  console.log(JSON.stringify(data, null, 2));
-
-  console.log('\n--- Latest Scheduled Messages ---');
-  const { data: msgs, error: msgErr } = await supabase
-    .from('scheduled_messages')
-    .select('*, template:message_templates(*)')
     .order('created_at', { ascending: false })
     .limit(5);
-  console.log(JSON.stringify(msgs, null, 2));
+  console.log('Recent messages:', JSON.stringify(recent, null, 2));
+
+  const { data: templates, error: err3 } = await supabase
+    .from('message_templates')
+    .select('*');
+  console.log('Templates:', JSON.stringify(templates, null, 2));
 }
 
 check();

@@ -6,6 +6,7 @@ import { CalendarPlus, Loader2 } from "lucide-react";
 import CalendarView from "./CalendarView";
 import ReservationModal from "./ReservationModal";
 import { useToast } from "@/components/ToastProvider";
+import { createReservationAction } from "./actions";
 
 export default function ReservationsPage() {
     const { showToast } = useToast();
@@ -102,28 +103,10 @@ export default function ReservationsPage() {
             return;
         }
 
-        const { data: userData } = await supabase.auth.getUser();
-        const { data: business } = await supabase
-            .from("businesses")
-            .select("id")
-            .eq("user_id", userData.user?.id)
-            .single();
-
-        if (!business) return;
-
-        const { error } = await supabase.from("reservations").insert({
-            business_id: business.id,
-            room_id: parseInt(formData.room_id),
-            guest_name: formData.guest_name,
-            phone: formData.phone.replace(/[^0-9]/g, ""),
-            check_in: formData.check_in,
-            check_out: formData.check_out,
-            memo: formData.memo,
-            selected_options: formData.selected_options,
-        });
-
-        if (error) {
-            showToast("예약 등록에 실패했습니다: " + error.message, "error");
+        const res = await createReservationAction(formData);
+ 
+        if (res.error) {
+            showToast(res.error, "error");
         } else {
             showToast("예약이 등록되었습니다.", "success");
             // Reset form (keep room_id)

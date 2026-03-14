@@ -127,3 +127,76 @@ export async function sendManualSmsAction(reservationId: number, templateId: str
 
     return { success: true };
 }
+
+export async function createReservationAction(formData: {
+    room_id: string;
+    guest_name: string;
+    phone: string;
+    check_in: string;
+    check_out: string;
+    memo: string;
+    selected_options: string[];
+}) {
+    const supabase = await createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "로그인이 필요합니다." };
+
+    const { data: business } = await supabase
+        .from("businesses")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+
+    if (!business) return { error: "업체 정보를 찾을 수 없습니다." };
+
+    // 1. Insert Reservation
+    const { data: reservation, error: resError } = await supabase
+        .from("reservations")
+        .insert({
+            business_id: business.id,
+            room_id: parseInt(formData.room_id),
+            guest_name: formData.guest_name,
+            phone: formData.phone.replace(/[^0-9]/g, ""),
+            check_in: formData.check_in,
+            check_out: formData.check_out,
+            memo: formData.memo,
+            selected_options: formData.selected_options,
+        })
+        .select()
+        .single();
+
+    if (resError || !reservation) {
+        return { error: "예약 등록 실패: " + (resError?.message || "알 수 없는 오류") };
+    }
+
+    // 2. Fetch Active Templates for this room
+    const { data: templates } = await supabase
+        .from("message_templates")
+        .select("*")
+        .eq("room_id", reservation.room_id)
+        .eq("is_active", true);
+
+    if (templates && templates.length > 0) {
+        const messagesToSchedule = templates.map(tpl => {
+            const baseDate = tpl.trigger_type === 'checkout' ? reservation.check_out : reservation.check_in;
+            // Combined ISO string in local time, then toISOString() for DB
+            // Note: If tpl.send_time is "11:00", we create "YYYY-MM-DDT11:00:00"
+            const scheduledAt = new Date(`${baseDate}T${tpl.send_time}`).toISOString();
+
+            return {
+                reservation_id: reservation.id,
+                template_id: tpl.id,
+                scheduled_at: scheduledAt,
+                status: 'pending'
+            };
+        });
+
+        const { error: scheduleError } = await supabase.from("scheduled_messages").insert(messagesToSchedule);
+        if (scheduleError) {
+            console.error("Scheduling error:", scheduleError);
+        }
+    }
+
+    return { success: true };
+}
