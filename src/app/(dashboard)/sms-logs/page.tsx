@@ -9,12 +9,16 @@ export default function SmsLogsPage() {
     const supabase = createClient();
     const [logs, setLogs] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchLogs() {
             setLoading(true);
+            setError(null);
             const res = await fetchSmsLogsAction();
-            if (res.data) {
+            if (res.error) {
+                setError(res.error);
+            } else if (res.data) {
                 setLogs(res.data);
             }
             setLoading(false);
@@ -58,6 +62,11 @@ export default function SmsLogsPage() {
             </div>
 
             <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden">
+                {error && (
+                    <div className="p-4 bg-red-50 text-red-600 text-sm border-b border-red-100">
+                        에러 발생: {error}
+                    </div>
+                )}
                 {loading ? (
                     <div className="py-24 flex justify-center">
                         <Loader2 className="w-8 h-8 text-indigo-500 animate-spin" />
