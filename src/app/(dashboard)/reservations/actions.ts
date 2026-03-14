@@ -26,11 +26,14 @@ async function uploadFileToSolapi(imageUrl: string) {
     const apiSecret = process.env.SOLAPI_API_SECRET!;
     const authHeader = getSolapiAuthHeader(apiKey, apiSecret);
 
+    console.log(`[Solapi] Fetching image from: ${imageUrl}`);
     const imageRes = await fetch(imageUrl);
-    if (!imageRes.ok) throw new Error("Failed to fetch image from URL");
+    if (!imageRes.ok) throw new Error(`이미지 다운로드 실패 (${imageRes.status})`);
+    
     const buffer = await imageRes.arrayBuffer();
     const base64 = Buffer.from(buffer).toString("base64");
 
+    console.log(`[Solapi] Uploading image to Solapi (Size: ${buffer.byteLength} bytes)`);
     const uploadRes = await fetch("https://api.solapi.com/storage/v1/files", {
         method: "POST",
         headers: {
@@ -44,7 +47,10 @@ async function uploadFileToSolapi(imageUrl: string) {
     });
 
     const uploadResult = await uploadRes.json();
-    if (!uploadRes.ok) throw new Error("Solapi upload failed: " + JSON.stringify(uploadResult));
+    if (!uploadRes.ok) {
+        console.error("[Solapi] Upload Error:", uploadResult);
+        throw new Error(`Solapi 업로드 에러: ${uploadResult.errorMessage || JSON.stringify(uploadResult)}`);
+    }
     return uploadResult.fileId;
 }
 
