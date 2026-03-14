@@ -16,6 +16,16 @@ function getSolapiAuthHeader(apiKey: string, apiSecret: string) {
     return `HMAC-SHA256 apiKey=${apiKey}, date=${date}, salt=${salt}, signature=${signature}`;
 }
 
+function getByteLength(str: string) {
+    let length = 0;
+    for (let i = 0; i < str.length; i++) {
+        const charCode = str.charCodeAt(i);
+        if (charCode <= 127) length += 1;
+        else length += 2;
+    }
+    return length;
+}
+
 async function uploadFileToSolapi(imageUrl: string) {
     const apiKey = process.env.SOLAPI_API_KEY!;
     const apiSecret = process.env.SOLAPI_API_SECRET!;
@@ -57,18 +67,28 @@ async function sendSolapiMessage(to: string, from: string, text: string, subject
         }
     }
 
+    const byteLen = getByteLength(text);
     const messagePayload: any = {
         message: {
             to: to.replace(/[^0-9]/g, ""),
             from: from.replace(/[^0-9]/g, ""),
             text,
-            subject: subjectTitle,
         }
     };
 
     if (imageId) {
-        messagePayload.message.imageId = imageId;
+        // MMS Case
         messagePayload.message.type = "MMS";
+        messagePayload.message.subject = subjectTitle;
+        messagePayload.message.imageId = imageId;
+    } else if (byteLen > 90) {
+        // LMS Case
+        messagePayload.message.type = "LMS";
+        messagePayload.message.subject = subjectTitle;
+    } else {
+        // SMS Case
+        messagePayload.message.type = "SMS";
+        // Omit subject for SMS
     }
 
     const response = await fetch("https://api.solapi.com/messages/v4/send", {
