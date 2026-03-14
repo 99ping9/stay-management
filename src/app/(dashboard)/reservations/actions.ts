@@ -1,3 +1,4 @@
+
 "use server";
 
 import crypto from "crypto";
@@ -38,16 +39,49 @@ async function sendSolapiMessage(to: string, from: string, text: string, subject
     return { ok: response.ok, result };
 }
 
-export async function sendManualSmsAction(reservationId: number, templateId: string) {
+export async function fetchReservationDataAction() {
     const supabase = await createClient();
+    const adminSupabase = await createAdminClient();
 
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        return { error: "로그인이 필요합니다." };
-    }
+    if (!user) return { error: "로그인이 필요합니다." };
 
-    // Fetch reservation with room and business info
-    const { data: reservation, error: resError } = await supabase
+    const { data: business } = await adminSupabase
+        .from("businesses")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+
+    if (!business) return { error: "업체 정보를 찾을 수 없습니다." };
+
+    const { data: rooms } = await adminSupabase
+        .from("rooms")
+        .select("*")
+        .eq("business_id", business.id);
+
+    const { data: reservations } = await adminSupabase
+        .from("reservations")
+        .select(`
+            *,
+            room:rooms(name, color, options)
+        `)
+        .eq("business_id", business.id);
+
+    return { 
+        rooms: rooms || [], 
+        reservations: reservations || [],
+        businessId: business.id
+    };
+}
+
+export async function sendManualSmsAction(reservationId: number, templateId: string) {
+    const supabase = await createClient();
+    const adminSupabase = await createAdminClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "로그인이 필요합니다." };
+
+    const { data: reservation, error: resError } = await adminSupabase
         .from("reservations")
         .select(`
             *,
@@ -64,8 +98,7 @@ export async function sendManualSmsAction(reservationId: number, templateId: str
         return { error: "예약 정보를 찾을 수 없습니다." };
     }
 
-    // Fetch the template
-    const { data: template, error: tplError } = await supabase
+    const { data: template, error: tplError } = await adminSupabase
         .from("message_templates")
         .select("*")
         .eq("id", parseInt(templateId))
@@ -83,7 +116,6 @@ export async function sendManualSmsAction(reservationId: number, templateId: str
         return { error: "솔라피 설정이 서버에 구성되지 않았습니다." };
     }
 
-    // --- Dynamic Placeholder Replacement ---
     const resData = reservation as any;
     let text = template.content || "";
     const optList = (resData.selected_options || []).join(", ");
@@ -98,9 +130,7 @@ export async function sendManualSmsAction(reservationId: number, templateId: str
     Object.entries(replacements).forEach(([key, val]) => {
         text = text.split(key).join(val);
     });
-    // ----------------------------------------
 
-    // Determine recipients
     let recipients: string[] = [];
     if (template.recipient_type === 'staff') {
         const staff = resData.room?.staff_members || [];
@@ -113,7 +143,6 @@ export async function sendManualSmsAction(reservationId: number, templateId: str
         return { error: "수신자 전화번호가 없습니다." };
     }
 
-    // Send to all recipients
     const results = [];
     for (const phone of recipients) {
         const solapiRes = await sendSolapiMessage(phone, senderNumber, text, template.title);
@@ -143,7 +172,7 @@ export async function createReservationAction(formData: {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { error: "로그인이 필요합니다." };
 
-    const { data: business } = await supabase
+    const { data: business } = await adminSupabase
         .from("businesses")
         .select("id")
         .eq("user_id", user.id)
@@ -151,8 +180,7 @@ export async function createReservationAction(formData: {
 
     if (!business) return { error: "업체 정보를 찾을 수 없습니다." };
 
-    // 1. Insert Reservation
-    const { data: reservation, error: resError } = await supabase
+    const { data: reservation, error: resError } = await adminSupabase
         .from("reservations")
         .insert({
             business_id: business.id,
@@ -171,7 +199,6 @@ export async function createReservationAction(formData: {
         return { error: "예약 등록 실패: " + (resError?.message || "알 수 없는 오류") };
     }
 
-    // 2. Fetch Active Templates for this room (Using admin client to bypass RLS)
     const { data: templates } = await adminSupabase
         .from("message_templates")
         .select("*")
@@ -181,8 +208,6 @@ export async function createReservationAction(formData: {
     if (templates && templates.length > 0) {
         const messagesToSchedule = templates.map(tpl => {
             const baseDate = tpl.trigger_type === 'checkout' ? reservation.check_out : reservation.check_in;
-            // Combined ISO string in local time, then toISOString() for DB
-            // Note: If tpl.send_time is "11:00", we create "YYYY-MM-DDT11:00:00"
             const scheduledAt = new Date(`${baseDate}T${tpl.send_time}`).toISOString();
 
             return {

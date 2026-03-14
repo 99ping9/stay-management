@@ -6,7 +6,7 @@ import { CalendarPlus, Loader2 } from "lucide-react";
 import CalendarView from "./CalendarView";
 import ReservationModal from "./ReservationModal";
 import { useToast } from "@/components/ToastProvider";
-import { createReservationAction } from "./actions";
+import { createReservationAction, fetchReservationDataAction } from "./actions";
 
 export default function ReservationsPage() {
     const { showToast } = useToast();
@@ -14,6 +14,7 @@ export default function ReservationsPage() {
     const [rooms, setRooms] = useState<any[]>([]);
     const [reservations, setReservations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [businessId, setBusinessId] = useState<number>(0);
 
     // Filter State
     const [selectedRoomFilters, setSelectedRoomFilters] = useState<string[]>([]);
@@ -34,57 +35,25 @@ export default function ReservationsPage() {
 
     const fetchData = async () => {
         setLoading(true);
-        const roomId = localStorage.getItem("selectedRoomId");
+        const res = await fetchReservationDataAction();
+        
+        if (res.error) {
+            console.error(res.error);
+        } else {
+            setRooms(res.rooms || []);
+            setReservations(res.reservations || []);
+            setBusinessId(res.businessId || 0);
 
-        // In a real app we'd fetch the business ID from session
-        const { data: userData } = await supabase.auth.getUser();
-        if (!userData.user) return;
-
-        const { data: business } = await supabase
-            .from("businesses")
-            .select("id")
-            .eq("user_id", userData.user.id)
-            .single();
-
-        if (!business) return;
-
-        // Fetch rooms for dropdown
-        const { data: roomsData } = await supabase
-            .from("rooms")
-            .select("*")
-            .eq("business_id", business.id);
-
-        if (roomsData) {
-            setRooms(roomsData);
-            if (roomId && !formData.room_id) {
-                setFormData(prev => ({ ...prev, room_id: roomId }));
-            } else if (roomsData.length > 0 && !formData.room_id) {
-                setFormData(prev => ({ ...prev, room_id: roomsData[0].id.toString() }));
+            const roomId = localStorage.getItem("selectedRoomId");
+            if (res.rooms && res.rooms.length > 0) {
+                if (roomId && !formData.room_id) {
+                    setFormData(prev => ({ ...prev, room_id: roomId }));
+                } else if (!formData.room_id) {
+                    setFormData(prev => ({ ...prev, room_id: res.rooms[0].id.toString() }));
+                }
+                setSelectedRoomFilters(res.rooms.map(r => r.id.toString()));
             }
         }
-
-        // Fetch reservations
-        const { data: resData } = await supabase
-            .from("reservations")
-            .select(`
-        *,
-        room:rooms(name, color, options)
-      `)
-            .eq("business_id", business.id);
-
-        if (resData) {
-            const mapped = resData.map((r: any) => ({
-                ...r,
-                room_name: r.room?.name || "알수없음",
-                room_color: r.room?.color || null
-            }));
-            setReservations(mapped);
-        }
-
-        if (roomsData && roomsData.length > 0) {
-            setSelectedRoomFilters(roomsData.map(r => r.id.toString()));
-        }
-
         setLoading(false);
     };
 
