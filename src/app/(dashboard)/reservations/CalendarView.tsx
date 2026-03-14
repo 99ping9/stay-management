@@ -18,13 +18,16 @@ export default function CalendarView({
     // Map backend reservations to FullCalendar events
     const events = reservations.map((r) => {
         // Use custom room color from DB, fallback to deterministic hash color if empty
+        const roomName = r.room?.name || "알 수 없는 숙소";
+        const roomColor = r.room?.color;
+        
         const colors = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#f43f5e"];
-        const textHash = Array.from(String(r.room_name || "")).reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
-        const color = r.room_color || colors[textHash % colors.length];
+        const textHash = Array.from(String(roomName)).reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+        const color = roomColor || colors[textHash % colors.length];
 
         return {
             id: r.id.toString(),
-            title: `${r.room_name} - ${r.guest_name}`,
+            title: `${roomName} - ${r.guest_name || '이름 없음'}`,
             start: r.check_in,
             end: r.check_out, // FullCalendar naturally excludes this day for allDay events
             allDay: true,
