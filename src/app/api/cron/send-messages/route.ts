@@ -58,7 +58,9 @@ export async function GET(request: Request) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const now = new Date().toISOString();
+        const { searchParams } = new URL(request.url);
+        const testNow = searchParams.get("test_now");
+        const now = testNow || new Date().toISOString();
 
         // Fetch pending messages scheduled strictly before now
         const { data: pendingMessages, error: fetchError } = await (supabase
@@ -192,7 +194,7 @@ export async function GET(request: Request) {
             }
         }
 
-        return NextResponse.json({ processed: pendingMessages.length, results });
+        return NextResponse.json({ processed: pendingMessages.length, results, checked_at: now });
 
     } catch (error: any) {
         console.error("Cron exception:", error);
