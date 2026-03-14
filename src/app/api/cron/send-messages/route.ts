@@ -53,12 +53,14 @@ async function sendSolapiMessage(to: string, from: string, text: string, subject
 
 export async function GET(request: Request) {
     try {
+        const { searchParams } = new URL(request.url);
         const authHeader = request.headers.get('authorization');
-        if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        const queryKey = searchParams.get('key');
+        
+        if (authHeader !== `Bearer ${process.env.CRON_SECRET}` && queryKey !== process.env.CRON_SECRET) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const { searchParams } = new URL(request.url);
         const testNow = searchParams.get("test_now");
         const now = testNow || new Date().toISOString();
 
