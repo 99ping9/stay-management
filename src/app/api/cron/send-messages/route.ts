@@ -16,10 +16,46 @@ function getSolapiAuthHeader(apiKey: string, apiSecret: string) {
     return `HMAC-SHA256 apiKey=${apiKey}, date=${date}, salt=${salt}, signature=${signature}`;
 }
 
-async function sendSolapiMessage(to: string, from: string, text: string, subjectTitle: string) {
+async function uploadFileToSolapi(imageUrl: string) {
     const apiKey = process.env.SOLAPI_API_KEY!;
     const apiSecret = process.env.SOLAPI_API_SECRET!;
     const authHeader = getSolapiAuthHeader(apiKey, apiSecret);
+
+    const imageRes = await fetch(imageUrl);
+    if (!imageRes.ok) throw new Error("Failed to fetch image from URL");
+    const buffer = await imageRes.arrayBuffer();
+    const base64 = Buffer.from(buffer).toString("base64");
+
+    const uploadRes = await fetch("https://api.solapi.com/storage/v1/files", {
+        method: "POST",
+        headers: {
+            "Authorization": authHeader,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            file: base64,
+            type: "MMS"
+        })
+    });
+
+    const uploadResult = await uploadRes.json();
+    if (!uploadRes.ok) throw new Error("Solapi upload failed: " + JSON.stringify(uploadResult));
+    return uploadResult.fileId;
+}
+
+async function sendSolapiMessage(to: string, from: string, text: string, subjectTitle: string, imageUrl?: string) {
+    const apiKey = process.env.SOLAPI_API_KEY!;
+    const apiSecret = process.env.SOLAPI_API_SECRET!;
+    const authHeader = getSolapiAuthHeader(apiKey, apiSecret);
+
+    let imageId = undefined;
+    if (imageUrl) {
+        try {
+            imageId = await uploadFileToSolapi(imageUrl);
+        } catch (err) {
+            console.error("Image upload failed:", err);
+        }
+    }
 
     const messagePayload: any = {
         message: {
@@ -27,9 +63,13 @@ async function sendSolapiMessage(to: string, from: string, text: string, subject
             from: from.replace(/[^0-9]/g, ""),
             text,
             subject: subjectTitle,
-            // type is omitted to allow Solapi auto-detection (SMS/LMS)
         }
     };
+
+    if (imageId) {
+        messagePayload.message.imageId = imageId;
+        messagePayload.message.type = "MMS";
+    }
 
     const response = await fetch("https://api.solapi.com/messages/v4/send", {
         method: "POST",
@@ -82,6 +122,7 @@ export async function GET(request: Request) {
                     id,
                     title,
                     content,
+                    image_url,
                     recipient_type
                 )
             `)
@@ -160,7 +201,7 @@ export async function GET(request: Request) {
             const errors = [];
 
             for (const phone of recipients) {
-                const solapiResponse = await sendSolapiMessage(phone, senderNumber, text, title);
+                const solapiResponse = await sendSolapiMessage(phone, senderNumber, text, title, tplData?.image_url);
                 if (!solapiResponse.ok) {
                     allOk = false;
                     errors.push({ phone, error: solapiResponse.result });
