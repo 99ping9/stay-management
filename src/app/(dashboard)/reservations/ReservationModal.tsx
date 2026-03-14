@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Loader2, MessageSquare, Save, Trash2, X } from "lucide-react";
+import { Loader2, MessageSquare, X } from "lucide-react";
 import { sendManualSmsAction } from "./actions";
+import { useToast } from "@/components/ToastProvider";
 
 export default function ReservationModal({
     reservation,
@@ -14,6 +15,7 @@ export default function ReservationModal({
     onClose: () => void;
     onUpdate: () => void;
 }) {
+    const { showToast } = useToast();
     const supabase = createClient();
     const [formData, setFormData] = useState({
         guest_name: reservation.guest_name || "",
@@ -73,9 +75,9 @@ export default function ReservationModal({
         setIsSaving(false);
 
         if (error) {
-            alert("수정 실패: " + error.message);
+            showToast("수정 실패: " + error.message, "error");
         } else {
-            alert("예약이 수정되었습니다.");
+            showToast("예약이 수정되었습니다.", "success");
             onUpdate();
             onClose();
         }
@@ -88,9 +90,9 @@ export default function ReservationModal({
         setIsDeleting(false);
 
         if (error) {
-            alert("삭제 실패: " + error.message);
+            showToast("삭제 실패: " + error.message, "error");
         } else {
-            alert("삭제되었습니다.");
+            showToast("삭제되었습니다.", "success");
             onUpdate();
             onClose();
         }
@@ -98,7 +100,7 @@ export default function ReservationModal({
 
     const handleManualSms = async () => {
         if (!selectedTemplate) {
-            alert("발송할 템플릿(종류)을 선택해주세요.");
+            showToast("발송할 템플릿(종류)을 선택해주세요.", "info");
             return;
         }
         if (!confirm("정말로 문자를 즉시 발송하시겠습니까?")) return;
@@ -108,9 +110,9 @@ export default function ReservationModal({
         setIsSending(false);
 
         if (res.error) {
-            alert("발송 실패: " + res.error);
+            showToast("발송 실패: " + res.error, "error");
         } else {
-            alert("문자가 성공적으로 발송되었습니다.");
+            showToast("문자가 성공적으로 발송되었습니다.", "success");
             onClose();
         }
     };

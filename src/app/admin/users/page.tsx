@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Users, Plus, Settings, Trash2, Save, X as XIcon } from "lucide-react";
+import { useToast } from "@/components/ToastProvider";
 
 export default function AdminUsersPage() {
+    const { showToast } = useToast();
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState<any[]>([]);
@@ -93,7 +95,7 @@ export default function AdminUsersPage() {
             if (!res.ok) throw new Error(data.error);
             setUserRooms(data.rooms || []);
         } catch (err: any) {
-            alert(err.message || "설정된 숙소 정보를 불러오는데 실패했습니다.");
+            showToast(err.message || "설정된 숙소 정보를 불러오는데 실패했습니다.", "error");
         } finally {
             setIsRoomsLoading(false);
         }
@@ -123,7 +125,7 @@ export default function AdminUsersPage() {
             setNewRoomColor("#3b82f6");
             fetchUserRooms(selectedUserForRooms.id);
         } catch (err: any) {
-            alert(err.message || "숙소를 추가하는데 실패했습니다.");
+            showToast(err.message || "숙소를 추가하는데 실패했습니다.", "error");
         } finally {
             setIsAddingRoom(false);
         }
@@ -137,7 +139,7 @@ export default function AdminUsersPage() {
             if (!res.ok) throw new Error(data.error);
             fetchUserRooms(selectedUserForRooms.id);
         } catch (err: any) {
-            alert(err.message || "숙소를 삭제하는데 실패했습니다.");
+            showToast(err.message || "숙소를 삭제하는데 실패했습니다.", "error");
         }
     };
 
@@ -165,11 +167,11 @@ export default function AdminUsersPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error);
 
-            alert("저장되었습니다.");
+            showToast("저장되었습니다.", "success");
             setEditingRoom(null);
             fetchUserRooms(selectedUserForRooms.id);
         } catch (err: any) {
-            alert(err.message || "옵션을 저장하는데 실패했습니다.");
+            showToast(err.message || "옵션을 저장하는데 실패했습니다.", "error");
         }
     };
 
@@ -198,12 +200,12 @@ export default function AdminUsersPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error);
 
-            alert("저장되었습니다.");
+            showToast("저장되었습니다.", "success");
             setIsStaffEditorOpen(false);
             setEditingRoom(null);
             fetchUserRooms(selectedUserForRooms.id);
         } catch (err: any) {
-            alert(err.message || "직원 정보를 저장하는데 실패했습니다.");
+            showToast(err.message || "직원 정보를 저장하는데 실패했습니다.", "error");
         }
     };
 

@@ -5,8 +5,10 @@ import { createClient } from "@/lib/supabase/client";
 import { CalendarPlus, Loader2 } from "lucide-react";
 import CalendarView from "./CalendarView";
 import ReservationModal from "./ReservationModal";
+import { useToast } from "@/components/ToastProvider";
 
 export default function ReservationsPage() {
+    const { showToast } = useToast();
     const supabase = createClient();
     const [rooms, setRooms] = useState<any[]>([]);
     const [reservations, setReservations] = useState<any[]>([]);
@@ -96,7 +98,7 @@ export default function ReservationsPage() {
     const handleCreateReservation = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!formData.room_id || !formData.check_in || !formData.check_out || !formData.phone) {
-            alert("필수 항목을 모두 입력해주세요.");
+            showToast("필수 항목을 모두 입력해주세요.", "info");
             return;
         }
 
@@ -121,9 +123,9 @@ export default function ReservationsPage() {
         });
 
         if (error) {
-            alert("예약 등록에 실패했습니다: " + error.message);
+            showToast("예약 등록에 실패했습니다: " + error.message, "error");
         } else {
-            alert("예약이 등록되었습니다.");
+            showToast("예약이 등록되었습니다.", "success");
             // Reset form (keep room_id)
             setFormData(prev => ({ ...prev, guest_name: "", phone: "", check_in: "", check_out: "", memo: "", selected_options: [] }));
             fetchData(); // Refresh calendar

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Loader2, X, Plus, Trash2, Save, Users } from "lucide-react";
 import { saveRoomStaffAction } from "./actions";
+import { useToast } from "@/components/ToastProvider";
 
 export default function StaffManageModal({
     isOpen,
@@ -15,6 +16,7 @@ export default function StaffManageModal({
     room: any;
     onSuccess: () => void;
 }) {
+    const { showToast } = useToast();
     const [loading, setLoading] = useState(false);
     const [staffMembers, setStaffMembers] = useState<{ name: string; phone: string }[]>([]);
 
@@ -33,9 +35,9 @@ export default function StaffManageModal({
         setLoading(false);
 
         if (res.error) {
-            alert("저장 실패: " + res.error);
+            showToast("저장 실패: " + res.error, "error");
         } else {
-            alert("저장되었습니다.");
+            showToast("저장되었습니다.", "success");
             onSuccess();
             onClose();
         }

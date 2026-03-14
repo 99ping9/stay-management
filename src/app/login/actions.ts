@@ -19,7 +19,15 @@ export async function login(prevState: any, formData: FormData) {
     });
 
     if (error) {
-        return { error: "로그인에 실패했습니다: " + error.message };
+        let errorMessage = "로그인에 실패했습니다.";
+        if (error.message === "Invalid login credentials") {
+            errorMessage = "이메일 또는 비밀번호가 틀렸습니다.";
+        } else if (error.message.includes("API key")) {
+            errorMessage = "시스템 설정 오류가 발생했습니다. (API Key 확인 필요)";
+        } else {
+            errorMessage = `로그인 실패: ${error.message}`;
+        }
+        return { error: errorMessage };
     }
 
     redirect("/");

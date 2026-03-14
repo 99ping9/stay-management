@@ -6,8 +6,10 @@ import { Loader2, Plus, Edit2, Trash2, Users } from "lucide-react";
 import TemplateModal from "./TemplateModal";
 import StaffManageModal from "./StaffManageModal";
 import { toggleTemplateActiveAction } from "./actions";
+import { useToast } from "@/components/ToastProvider";
 
 export default function TemplatesPage() {
+    const { showToast } = useToast();
     const supabase = createClient();
     const [rooms, setRooms] = useState<any[]>([]);
     const [selectedRoomId, setSelectedRoomId] = useState<string>("");
@@ -86,8 +88,9 @@ export default function TemplatesPage() {
     const handleToggleActive = async (id: number, currentActive: boolean) => {
         const { error } = await toggleTemplateActiveAction(id, !currentActive);
         if (error) {
-            alert("상태 변경 실패: " + error);
+            showToast("상태 변경 실패: " + error, "error");
         } else {
+            showToast(`상태가 ${!currentActive ? '활성화' : '비활성화'} 되었습니다.`, "success");
             fetchTemplates(selectedRoomId);
         }
     };
@@ -96,10 +99,10 @@ export default function TemplatesPage() {
         if (!confirm("정말 이 템플릿을 삭제하시겠습니까?")) return;
         const { error } = await supabase.from("message_templates").delete().eq("id", id);
         if (!error) {
-            alert("삭제되었습니다.");
+            showToast("삭제되었습니다.", "success");
             fetchTemplates(selectedRoomId);
         } else {
-            alert("삭제 실패: " + error.message);
+            showToast("삭제 실패: " + error.message, "error");
         }
     };
 
@@ -155,7 +158,7 @@ export default function TemplatesPage() {
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => {
-                                if (!selectedRoomId) return alert("숙소를 먼저 선택해주세요.");
+                                if (!selectedRoomId) return showToast("숙소를 먼저 선택해주세요.", "info");
                                 setIsStaffModalOpen(true);
                             }}
                             className="flex items-center gap-2 bg-white hover:bg-emerald-50 text-emerald-600 border border-emerald-200 px-4 py-2 rounded-xl text-sm font-semibold shadow-sm transition-all"
@@ -165,7 +168,7 @@ export default function TemplatesPage() {
                         </button>
                         <button
                             onClick={() => {
-                                if (!selectedRoomId) return alert("숙소를 먼저 선택해주세요.");
+                                if (!selectedRoomId) return showToast("숙소를 먼저 선택해주세요.", "info");
                                 setEditingTemplate(null);
                                 setIsModalOpen(true);
                             }}

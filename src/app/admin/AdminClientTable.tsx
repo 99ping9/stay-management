@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { Edit2, Save, X } from "lucide-react";
 import { updateBusiness } from "./actions";
+import { useToast } from "@/components/ToastProvider";
 
 export default function AdminClientTable({ initialBusinesses }: { initialBusinesses: any[] }) {
+    const { showToast } = useToast();
     const [businesses, setBusinesses] = useState(initialBusinesses);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [editForm, setEditForm] = useState<any>({});
@@ -24,8 +26,9 @@ export default function AdminClientTable({ initialBusinesses }: { initialBusines
         setLoading(true);
         const res = await updateBusiness(id, editForm);
         if (res.error) {
-            alert("수정 실패: " + res.error);
+            showToast("수정 실패: " + res.error, "error");
         } else {
+            showToast("수정되었습니다.", "success");
             setBusinesses(businesses.map((b) => (b.id === id ? { ...b, ...editForm } : b)));
             setEditingId(null);
         }

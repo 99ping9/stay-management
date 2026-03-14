@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Loader2, X, Image as ImageIcon, Clock, Check } from "lucide-react";
 import { saveTemplateAction } from "./actions";
+import { useToast } from "@/components/ToastProvider";
 
 export default function TemplateModal({
     isOpen,
@@ -17,6 +18,7 @@ export default function TemplateModal({
     initialData: any | null;
     onSuccess: () => void;
 }) {
+    const { showToast } = useToast();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image_url || null);
@@ -74,7 +76,7 @@ export default function TemplateModal({
             setError(res.error);
             setLoading(false);
         } else {
-            alert("저장되었습니다.");
+            showToast("저장되었습니다.", "success");
             onSuccess();
             onClose();
         }
