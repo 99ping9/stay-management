@@ -11,7 +11,7 @@ const notoSansKr = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "ChowonSMS | 예약자 문자발송 관리",
+  title: "통합숙소관리 시스템 | 예약자 문자발송 관리",
   description: "숙소 업체를 위한 커스텀 SMS 자동발송 관리 웹앱",
 };
 
