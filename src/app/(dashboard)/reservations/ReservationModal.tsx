@@ -142,7 +142,6 @@ export default function ReservationModal({
                                 value={formData.guest_name}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-indigo-500 border-none transition-all"
-                                required
                             />
                         </div>
                         <div>

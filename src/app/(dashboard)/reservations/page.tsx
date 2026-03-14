@@ -156,7 +156,7 @@ export default function ReservationsPage() {
                     <form onSubmit={handleCreateReservation}>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <div className="col-span-1">
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">예약자 성함<span className="text-red-500 ml-1">*</span></label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">예약자 성함 (선택)</label>
                                 <input
                                     type="text"
                                     name="guest_name"
@@ -164,7 +164,6 @@ export default function ReservationsPage() {
                                     onChange={handleInputChange}
                                     className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all"
                                     placeholder="홍길동"
-                                    required
                                 />
                             </div>
 
