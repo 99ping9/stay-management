@@ -171,8 +171,8 @@ export async function createReservationAction(formData: {
         return { error: "예약 등록 실패: " + (resError?.message || "알 수 없는 오류") };
     }
 
-    // 2. Fetch Active Templates for this room
-    const { data: templates } = await supabase
+    // 2. Fetch Active Templates for this room (Using admin client to bypass RLS)
+    const { data: templates } = await adminSupabase
         .from("message_templates")
         .select("*")
         .eq("room_id", reservation.room_id)
