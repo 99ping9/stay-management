@@ -1,7 +1,7 @@
 "use server";
 
 import crypto from "crypto";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 
 function getSolapiAuthHeader(apiKey: string, apiSecret: string) {
     const date = new Date().toISOString();
@@ -138,6 +138,7 @@ export async function createReservationAction(formData: {
     selected_options: string[];
 }) {
     const supabase = await createClient();
+    const adminSupabase = await createAdminClient();
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { error: "로그인이 필요합니다." };
@@ -192,7 +193,7 @@ export async function createReservationAction(formData: {
             };
         });
 
-        const { error: scheduleError } = await supabase.from("scheduled_messages").insert(messagesToSchedule);
+        const { error: scheduleError } = await adminSupabase.from("scheduled_messages").insert(messagesToSchedule);
         if (scheduleError) {
             console.error("Scheduling error:", scheduleError);
         }

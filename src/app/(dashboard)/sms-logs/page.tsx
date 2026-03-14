@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Loader2, CheckCircle2, XCircle, Clock } from "lucide-react";
+import { fetchSmsLogsAction } from "./actions";
 
 export default function SmsLogsPage() {
     const supabase = createClient();
@@ -11,35 +12,10 @@ export default function SmsLogsPage() {
 
     useEffect(() => {
         async function fetchLogs() {
-            const { data: userData } = await supabase.auth.getUser();
-            if (!userData.user) return;
-
-            const { data: business } = await supabase
-                .from("businesses")
-                .select("id")
-                .eq("user_id", userData.user.id)
-                .single();
-
-            if (!business) return;
-
-            // Join scheduled_messages with reservations and templates
-            const { data: logData, error } = await supabase
-                .from("scheduled_messages")
-                .select(`
-          id,
-          status,
-          scheduled_at,
-          sent_at,
-          error_message,
-          reservation:reservations!inner ( guest_name, phone, room:rooms(name) ),
-          template:message_templates ( title, trigger_type )
-        `)
-                .eq("reservation.business_id", business.id)
-                .order("scheduled_at", { ascending: false })
-                .limit(100);
-
-            if (logData) {
-                setLogs(logData);
+            setLoading(true);
+            const res = await fetchSmsLogsAction();
+            if (res.data) {
+                setLogs(res.data);
             }
             setLoading(false);
         }

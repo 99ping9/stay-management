@@ -6,17 +6,14 @@ const supabase = createClient(
 );
 
 async function check() {
+  const { data: res } = await supabase.from('reservations').select('*').order('created_at', { ascending: false });
+  console.log('RESERVATIONS:', JSON.stringify(res, null, 2));
+
   const { data: templates } = await supabase.from('message_templates').select('*');
-  console.log('TEMPLATES COUNT:', templates.length);
-  templates.forEach(t => {
-    console.log(`ID: ${t.id}, Active: ${t.is_active}, Trigger: ${t.trigger_type}, Time: ${t.send_time}`);
-  });
+  console.log('TEMPLATES:', JSON.stringify(templates, null, 2));
 
   const { data: messages } = await supabase.from('scheduled_messages').select('*');
-  console.log('MESSAGES COUNT:', messages.length);
-  messages.forEach(m => {
-    console.log(`ID: ${m.id}, ResID: ${m.reservation_id}, Status: ${m.status}, ScheduledAt: ${m.scheduled_at}`);
-  });
+  console.log('MESSAGES:', JSON.stringify(messages, null, 2));
 }
 
 check();
