@@ -35,16 +35,16 @@ export async function saveTemplateAction(formData: FormData) {
             // Resize logic: max 1000px width/height, optimization via quality compress
             const optimizedBuffer = await sharp(buffer)
                 .resize({ width: 1000, height: 1000, fit: "inside", withoutEnlargement: true })
-                .webp({ quality: 80 })
+                .jpeg({ quality: 85, mozjpeg: true })
                 .toBuffer();
 
-            const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.webp`;
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
             const filePath = `templates/${room_id}/${fileName}`;
 
             const { data: uploadData, error: uploadError } = await supabase.storage
                 .from("mms_images")
                 .upload(filePath, optimizedBuffer, {
-                    contentType: "image/webp",
+                    contentType: "image/jpeg",
                     upsert: true,
                 });
 
