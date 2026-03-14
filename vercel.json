@@ -1,0 +1,11 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/send-messages",
+      "schedule": "* * * * *"
+    }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
+}

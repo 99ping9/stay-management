@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  devIndicators: {
+    appIsrStatus: false,
+    buildActivity: false,
+  } as any,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "4mb",
+    },
+  },
 };
 
 export default nextConfig;

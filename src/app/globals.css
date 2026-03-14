@@ -1,26 +1,124 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #1e293b;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: "Noto Sans KR", Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar for modern look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* FullCalendar Customizations */
+.fc {
+  font-family: var(--font-sans);
+  --fc-border-color: rgba(226, 232, 240, 0.6);
+  --fc-page-bg-color: transparent;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border-color: var(--fc-border-color);
+}
+
+.fc-col-header-cell {
+  background-color: rgba(248, 250, 252, 0.5);
+  padding: 12px 0;
+  font-weight: 600;
+  color: #475569;
+}
+
+.fc-daygrid-day-number {
+  color: #64748b;
+  font-weight: 500;
+  padding: 8px;
+}
+
+.fc-event {
+  border: none !important;
+  border-radius: 6px;
+  padding: 2px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.fc-event:hover {
+  transform: scale(1.02);
+}
+
+.fc-toolbar-title {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.fc-button {
+  background-color: white !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+  font-weight: 500 !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  text-transform: capitalize;
+  border-radius: 0.5rem !important;
+}
+
+.fc-button:hover {
+  background-color: #f8fafc !important;
+  color: #1e293b !important;
+}
+
+.fc-button-active {
+  background-color: #eff6ff !important;
+  color: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+}
+
+.fc-day-sun {
+  background-color: #fef2f2 !important;
+}
+
+.fc-day-sat {
+  background-color: #eff6ff !important;
+}
+
+.fc-day-sun .fc-daygrid-day-number,
+.fc-col-header-cell.fc-day-sun .fc-col-header-cell-cushion {
+  color: #ef4444 !important;
+}
+
+.fc-day-sat .fc-daygrid-day-number,
+.fc-col-header-cell.fc-day-sat .fc-col-header-cell-cushion {
+  color: #3b82f6 !important;
 }
