@@ -135,7 +135,7 @@ export default function ReservationModal({
                 <form onSubmit={handleUpdate} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">예약자명</label>
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">예약자 이름</label>
                             <input
                                 type="text"
                                 name="guest_name"

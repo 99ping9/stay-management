@@ -156,7 +156,7 @@ export default function ReservationsPage() {
                     <form onSubmit={handleCreateReservation}>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <div className="col-span-1">
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">예약자 성함 (선택)</label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">예약자 이름</label>
                                 <input
                                     type="text"
                                     name="guest_name"
