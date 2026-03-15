@@ -7,8 +7,15 @@ export async function resetPasswordAction(email: string) {
 
     const supabase = await createClient();
     
+    // Get headers to determine the current domain
+    const { headers } = await import('next/headers');
+    const headerList = await headers();
+    const host = headerList.get('host');
+    const protocol = host?.includes('localhost') ? 'http' : 'https';
+    const baseUrl = `${protocol}://${host}`;
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login/callback?next=/profile/reset-password`,
+        redirectTo: `${baseUrl}/login/callback?next=/profile/reset-password`,
     });
 
     if (error) {
