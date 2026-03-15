@@ -254,7 +254,20 @@ export async function createReservationAction(formData: {
 
     if (!business) return { error: "업체 정보를 찾을 수 없습니다." };
 
-    // 1. Create Reservation
+    // 1. Check for Duplicate/Overlapping Reservations
+    const { data: overlapping } = await adminSupabase
+        .from("reservations")
+        .select("id")
+        .eq("room_id", parseInt(formData.room_id))
+        .lt("check_in", formData.check_out) // Existing check-in is before requested check-out
+        .gt("check_out", formData.check_in) // Existing check-out is after requested check-in
+        .maybeSingle();
+
+    if (overlapping) {
+        return { error: "해당 기간에 이미 예약이 존재합니다. 날짜를 확인해주세요." };
+    }
+
+    // 2. Create Reservation
     const { data: reservation, error: resError } = await adminSupabase
         .from("reservations")
         .insert({
@@ -274,7 +287,7 @@ export async function createReservationAction(formData: {
         return { error: "예약 등록 실패: " + (resError?.message || "알 수 없는 오류") };
     }
 
-    // 2. Fetch Active Templates for this room
+    // 3. Fetch Active Templates for this room
     const { data: templates } = await adminSupabase
         .from("message_templates")
         .select("*")
@@ -283,28 +296,33 @@ export async function createReservationAction(formData: {
 
     if (templates && templates.length > 0) {
         const messagesToSchedule: any[] = [];
+        const now = new Date();
         const checkIn = new Date(reservation.check_in);
         const checkOut = new Date(reservation.check_out);
 
         templates.forEach(tpl => {
             if (tpl.trigger_type === 'checkin') {
                 // Schedule for check-in day
-                const scheduledAt = new Date(`${reservation.check_in}T${tpl.send_time}+09:00`).toISOString();
-                messagesToSchedule.push({
-                    reservation_id: reservation.id,
-                    template_id: tpl.id,
-                    scheduled_at: scheduledAt,
-                    status: 'pending'
-                });
+                const scheduledAtDate = new Date(`${reservation.check_in}T${tpl.send_time}+09:00`);
+                if (scheduledAtDate > now) {
+                    messagesToSchedule.push({
+                        reservation_id: reservation.id,
+                        template_id: tpl.id,
+                        scheduled_at: scheduledAtDate.toISOString(),
+                        status: 'pending'
+                    });
+                }
             } else if (tpl.trigger_type === 'checkout') {
                 // Schedule for check-out day
-                const scheduledAt = new Date(`${reservation.check_out}T${tpl.send_time}+09:00`).toISOString();
-                messagesToSchedule.push({
-                    reservation_id: reservation.id,
-                    template_id: tpl.id,
-                    scheduled_at: scheduledAt,
-                    status: 'pending'
-                });
+                const scheduledAtDate = new Date(`${reservation.check_out}T${tpl.send_time}+09:00`);
+                if (scheduledAtDate > now) {
+                    messagesToSchedule.push({
+                        reservation_id: reservation.id,
+                        template_id: tpl.id,
+                        scheduled_at: scheduledAtDate.toISOString(),
+                        status: 'pending'
+                    });
+                }
             } else if (tpl.trigger_type === 'multinight') {
                 // Schedule for every day between check-in and check-out (exclusive)
                 let current = new Date(checkIn);
@@ -312,13 +330,15 @@ export async function createReservationAction(formData: {
                 
                 while (current < checkOut) {
                     const dateStr = current.toISOString().split('T')[0];
-                    const scheduledAt = new Date(`${dateStr}T${tpl.send_time}+09:00`).toISOString();
-                    messagesToSchedule.push({
-                        reservation_id: reservation.id,
-                        template_id: tpl.id,
-                        scheduled_at: scheduledAt,
-                        status: 'pending'
-                    });
+                    const scheduledAtDate = new Date(`${dateStr}T${tpl.send_time}+09:00`);
+                    if (scheduledAtDate > now) {
+                        messagesToSchedule.push({
+                            reservation_id: reservation.id,
+                            template_id: tpl.id,
+                            scheduled_at: scheduledAtDate.toISOString(),
+                            status: 'pending'
+                        });
+                    }
                     current.setDate(current.getDate() + 1);
                 }
             }
