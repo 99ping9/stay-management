@@ -1,16 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
+import { createAdminClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-        auth: {
-            autoRefreshToken: false,
-            persistSession: false,
-        },
-    }
-);
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -21,8 +10,9 @@ export async function GET(request: Request) {
     }
 
     try {
+        const adminSupabase = await createAdminClient();
         // Find business for user
-        const { data: business } = await supabaseAdmin
+        const { data: business } = await adminSupabase
             .from('businesses')
             .select('id')
             .eq('user_id', userId)
@@ -32,7 +22,7 @@ export async function GET(request: Request) {
             return NextResponse.json({ rooms: [] });
         }
 
-        const { data: rooms, error } = await supabaseAdmin
+        const { data: rooms, error } = await adminSupabase
             .from('rooms')
             .select('*')
             .eq('business_id', business.id)
@@ -54,8 +44,9 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'userId와 roomName은 필수입니다.' }, { status: 400 });
         }
 
+        const adminSupabase = await createAdminClient();
         // 1. Get or create business for the user
-        let { data: business } = await supabaseAdmin
+        let { data: business } = await adminSupabase
             .from('businesses')
             .select('id')
             .eq('user_id', userId)
@@ -63,7 +54,7 @@ export async function POST(request: Request) {
 
         if (!business) {
             // Create a default business record since rooms require a business_id
-            const { data: newBusiness, error: bError } = await supabaseAdmin
+            const { data: newBusiness, error: bError } = await adminSupabase
                 .from('businesses')
                 .insert({
                     user_id: userId,
@@ -80,7 +71,7 @@ export async function POST(request: Request) {
         }
 
         // 2. Insert room
-        const { data: room, error: rError } = await supabaseAdmin
+        const { data: room, error: rError } = await adminSupabase
             .from('rooms')
             .insert({
                 business_id: business!.id,
@@ -106,7 +97,8 @@ export async function PATCH(request: Request) {
             return NextResponse.json({ error: 'roomId가 필요합니다.' }, { status: 400 });
         }
 
-        const { data: room, error } = await supabaseAdmin
+        const adminSupabase = await createAdminClient();
+        const { data: room, error } = await adminSupabase
             .from('rooms')
             .update({
                 name,
@@ -135,7 +127,8 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: 'roomId 파라미터가 필요합니다.' }, { status: 400 });
         }
 
-        const { error } = await supabaseAdmin
+        const adminSupabase = await createAdminClient();
+        const { error } = await adminSupabase
             .from('rooms')
             .delete()
             .eq('id', roomId);

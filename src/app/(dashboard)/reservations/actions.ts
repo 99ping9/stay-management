@@ -194,11 +194,17 @@ export async function sendManualSmsAction(reservationId: number, templateId: str
     let text = template.content || "";
     const optList = (resData.selected_options || []).join(", ");
     const replacements: Record<string, string> = {
+        // New System Placeholders
         "#{예약자명}": resData.guest_name || "",
         "#{숙소명}": resData.room?.name || "",
         "#{입실일}": resData.check_in || "",
         "#{퇴실일}": resData.check_out || "",
         "#{선택옵션}": optList.length > 0 ? optList : "없음",
+        // Legacy Chowon Placeholders
+        "{name}": resData.guest_name || "손님",
+        "{accommodation}": resData.room?.name || "",
+        "{checkin}": resData.check_in || "",
+        "{checkout}": resData.check_out || "",
     };
 
     Object.entries(replacements).forEach(([key, val]) => {
