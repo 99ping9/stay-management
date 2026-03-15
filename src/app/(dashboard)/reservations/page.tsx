@@ -204,7 +204,7 @@ export default function ReservationsPage() {
                                                     className={`
                                                         flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-all shadow-sm
                                                         ${isSelected
-                                                            ? "bg-blue-600 border-blue-600 text-white shadow-blue-200"
+                                                            ? "bg-blue-600 border-blue-600 text-white shadow-md"
                                                             : "bg-white border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-gray-50"
                                                         }
                                                     `}

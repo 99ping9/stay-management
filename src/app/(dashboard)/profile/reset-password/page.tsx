@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
                     
                     <div className="relative">
                         <div className="flex justify-center mb-8">
-                            <div className="p-4 bg-blue-600 text-white rounded-2xl shadow-xl shadow-blue-200">
+                            <div className="p-4 bg-blue-600 text-white rounded-2xl shadow-xl">
                                 <Sparkles className="w-8 h-8" />
                             </div>
                         </div>
@@ -119,7 +119,7 @@ export default function ResetPasswordPage() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3"
+                                className="w-full py-5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-2xl font-black text-lg shadow-xl transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3"
                             >
                                 {loading ? (
                                     <><Loader2 className="w-6 h-6 animate-spin" /> 처리 중...</>

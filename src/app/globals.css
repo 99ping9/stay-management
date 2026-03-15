@@ -6,7 +6,7 @@
   --background: #ffffff;
   --foreground: #171717;
   
-  /* Modern Blue Theme Palette */
+  /* Modern Blue Theme Palette - Using Hex for stability */
   --color-blue-50: #f0f7ff;
   --color-blue-100: #e0effe;
   --color-blue-200: #bae0fd;
@@ -20,22 +20,10 @@
   --color-white: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Base Styles */
-h1, h2, h3, h4, h5, h6 {
-  @apply tracking-tight;
 }
 
 /* FullCalendar Custom Styling - Blue Theme */
@@ -47,84 +35,62 @@ h1, h2, h3, h4, h5, h6 {
   --fc-button-hover-bg-color: #f8fafc;
   --fc-button-hover-border-color: #cbd5e1;
   --fc-button-active-bg-color: #f1f5f9;
-  --fc-button-active-border-color: #6366f1;
+  --fc-button-active-border-color: #0e8ce4;
   
   --fc-today-bg-color: rgba(14, 140, 228, 0.04);
   font-family: inherit;
-  @apply rounded-2xl overflow-hidden border-none shadow-sm bg-white/50 backdrop-blur-sm;
-}
-
-/* Calendar Header */
-.fc .fc-toolbar-title {
-  @apply text-xl font-black text-gray-900 px-2;
-}
-
-.fc .fc-button {
-  @apply rounded-xl px-4 py-2 text-sm font-bold transition-all shadow-sm border border-gray-200 capitalize;
-}
-
-.fc .fc-button-primary:not(:disabled).fc-button-active,
-.fc .fc-button-primary:not(:disabled):active {
-  @apply bg-blue-600 border-blue-600 text-white shadow-md;
-}
-
-.fc .fc-button-primary:focus {
-  @apply ring-0 outline-none;
-}
-
-/* Grid & Cells */
-.fc .fc-scrollgrid {
-  @apply rounded-2xl overflow-hidden border border-gray-100/50;
 }
 
 .fc-theme-standard td, .fc-theme-standard th {
-  @apply border-gray-100/50;
+  border-color: #f1f5f9 !important;
 }
 
-.fc .fc-col-header-cell {
-  @apply py-4 bg-gray-50/50 text-gray-400 font-bold text-[10px] uppercase tracking-[0.2em] border-b border-gray-100;
+.fc .fc-toolbar-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
 }
 
-.fc .fc-daygrid-day-number {
-  @apply p-3 text-sm font-bold text-gray-400;
+/* Calendar Button Styling */
+.fc .fc-button {
+  border-radius: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: capitalize !important;
+  transition: all 0.2s !important;
 }
 
-.fc .fc-day-today .fc-daygrid-day-number {
-  @apply text-blue-600;
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: #0e8ce4 !important;
+  border-color: #0e8ce4 !important;
+  color: white !important;
 }
 
-/* Events Styling */
+/* Event Styling */
 .fc-event {
-  @apply border-none shadow-sm transition-all duration-300 transform rounded-lg !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 2px 4px !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: transform 0.2s !important;
 }
 
 .fc-event:hover {
-  @apply scale-[1.02] shadow-md z-50 !important;
-}
-
-.fc-event-main {
-  @apply p-1.5 font-bold text-xs !important;
-}
-
-/* Custom Scrollbar for Calendar */
-.fc-scroller::-webkit-scrollbar {
-  width: 6px;
-}
-
-.fc-scroller::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-.fc-scroller::-webkit-scrollbar-thumb {
-  @apply bg-gray-200 rounded-full hover:bg-gray-300 transition-colors;
+  transform: scale(1.02) !important;
+  z-index: 10 !important;
 }
 
 /* Card Modern Effects */
 .card-shine {
-  @apply relative overflow-hidden;
+  position: relative;
+  overflow: hidden;
 }
 
 .card-shine::after {
   content: "";
-  @apply absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent pointer-events-none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top right, rgba(255,255,255,0.2), transparent);
+  pointer-events: none;
 }
