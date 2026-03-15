@@ -3,7 +3,8 @@
 import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "./actions";
-import { Mail, Lock, Loader2 } from "lucide-react";
+import { Mail, Lock, Loader2, Info } from "lucide-react";
+import { resetPasswordAction } from "./reset-actions";
 
 export default function LoginPage() {
     const [state, formAction, isPending] = useActionState(login, null);
@@ -12,6 +13,12 @@ export default function LoginPage() {
     const [adminPasswordInput, setAdminPasswordInput] = useState("");
     const [adminError, setAdminError] = useState("");
 
+    // Reset Password State
+    const [showResetModal, setShowResetModal] = useState(false);
+    const [resetEmail, setResetEmail] = useState("");
+    const [resetLoading, setResetLoading] = useState(false);
+    const [resetMessage, setResetMessage] = useState({ text: "", type: "" });
+
     const verifyAdminPassword = () => {
         if (adminPasswordInput === "dbsgusrn1!") {
             sessionStorage.setItem("isAdmin", "true");
@@ -19,6 +26,25 @@ export default function LoginPage() {
         } else {
             setAdminError("비밀번호가 일치하지 않습니다.");
         }
+    };
+
+    const handleResetPassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setResetLoading(true);
+        setResetMessage({ text: "", type: "" });
+
+        const res = await resetPasswordAction(resetEmail);
+        if (res.error) {
+            setResetMessage({ text: res.error, type: "error" });
+        } else {
+            setResetMessage({ text: "비밀번호 재설정 이메일이 발송되었습니다. 이메일을 확인해주세요.", type: "success" });
+            setTimeout(() => {
+                setShowResetModal(false);
+                setResetMessage({ text: "", type: "" });
+                setResetEmail("");
+            }, 3000);
+        }
+        setResetLoading(false);
     };
 
     return (
@@ -88,6 +114,16 @@ export default function LoginPage() {
                         ) : null}
                         로그인
                     </button>
+
+                    <div className="text-center mt-4">
+                        <button
+                            type="button"
+                            onClick={() => setShowResetModal(true)}
+                            className="text-xs text-gray-400 hover:text-indigo-600 transition-colors font-medium"
+                        >
+                            비밀번호를 잊으셨나요?
+                        </button>
+                    </div>
                 </form>
             </div>
 
@@ -131,6 +167,53 @@ export default function LoginPage() {
                                 접속
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Password Reset Modal */}
+            {showResetModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold text-gray-900">비밀번호 찾기</h3>
+                            <button onClick={() => { setShowResetModal(false); setResetMessage({ text: "", type: "" }); setResetEmail(""); }} className="text-gray-400 hover:text-gray-600">
+                                ✕
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleResetPassword} className="space-y-4">
+                            <div className="p-3 bg-indigo-50 rounded-xl border border-indigo-100 flex gap-3 text-xs text-indigo-700 mb-2">
+                                <Info className="w-4 h-4 flex-shrink-0" />
+                                <p>가입하신 이메일을 입력하시면 비밀번호 재설정 링크를 보내드립니다.</p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">이메일 주소</label>
+                                <input
+                                    type="email"
+                                    required
+                                    value={resetEmail}
+                                    onChange={(e) => setResetEmail(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all outline-none"
+                                    placeholder="your@email.com"
+                                />
+                            </div>
+
+                            {resetMessage.text && (
+                                <p className={`text-sm ${resetMessage.type === 'error' ? 'text-red-500' : 'text-green-600 font-medium'}`}>
+                                    {resetMessage.text}
+                                </p>
+                            )}
+
+                            <button
+                                type="submit"
+                                disabled={resetLoading}
+                                className="w-full py-3 px-4 rounded-xl text-white font-medium bg-gray-900 hover:bg-black shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                            >
+                                {resetLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "이메일 발송"}
+                            </button>
+                        </form>
                     </div>
                 </div>
             )}

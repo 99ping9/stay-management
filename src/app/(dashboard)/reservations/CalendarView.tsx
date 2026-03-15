@@ -9,9 +9,11 @@ import interactionPlugin from "@fullcalendar/interaction";
 export default function CalendarView({
     reservations,
     onEventClick,
+    onDatesSet,
 }: {
     reservations: any[];
     onEventClick: (reservation: any) => void;
+    onDatesSet?: (date: Date) => void;
 }) {
     const calendarRef = useRef<FullCalendar>(null);
 
@@ -52,6 +54,11 @@ export default function CalendarView({
                 events={events}
                 eventClick={(info) => {
                     onEventClick(info.event.extendedProps);
+                }}
+                datesSet={(arg) => {
+                    if (onDatesSet) {
+                        onDatesSet(arg.view.currentStart);
+                    }
                 }}
                 height="auto"
                 contentHeight="auto"

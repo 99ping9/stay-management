@@ -5,9 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut, Settings, Key, Loader2 } from "lucide-react";
+import { changePasswordAction } from "@/app/(dashboard)/profile/actions";
+import { useToast } from "./ToastProvider";
 
 export default function Navbar() {
+    const { showToast } = useToast();
     const pathname = usePathname();
     const router = useRouter();
     const supabase = createClient();
@@ -15,6 +18,16 @@ export default function Navbar() {
     const [showAdminLogin, setShowAdminLogin] = useState(false);
     const [adminPasswordInput, setAdminPasswordInput] = useState("");
     const [adminError, setAdminError] = useState("");
+
+    // Password Change State
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [pwdForm, setPwdForm] = useState({
+        current: "",
+        new: "",
+        confirm: ""
+    });
+    const [pwdLoading, setPwdLoading] = useState(false);
+    const [pwdError, setPwdError] = useState("");
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
@@ -31,6 +44,36 @@ export default function Navbar() {
         } else {
             setAdminError("비밀번호가 일치하지 않습니다.");
         }
+    };
+
+    const handlePasswordChange = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setPwdError("");
+
+        if (pwdForm.new !== pwdForm.confirm) {
+            setPwdError("새 비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
+        if (pwdForm.new.length < 6) {
+            setPwdError("비밀번호는 최소 6자 이상이어야 합니다.");
+            return;
+        }
+
+        setPwdLoading(true);
+        const res = await changePasswordAction({
+            currentPassword: pwdForm.current,
+            newPassword: pwdForm.new
+        });
+
+        if (res.error) {
+            setPwdError(res.error);
+        } else {
+            showToast("비밀번호가 성공적으로 변경되었습니다.", "success");
+            setShowPasswordModal(false);
+            setPwdForm({ current: "", new: "", confirm: "" });
+        }
+        setPwdLoading(false);
     };
 
     const navLinks = [
@@ -94,6 +137,14 @@ export default function Navbar() {
                                 관리자
                             </button>
                             <button
+                                onClick={() => setShowPasswordModal(true)}
+                                className="inline-flex items-center gap-2 text-gray-500 hover:text-amber-600 transition-colors text-sm font-medium px-3 py-2 rounded-lg hover:bg-amber-50"
+                            >
+                                <Key className="w-4 h-4" />
+                                비밀번호 변경
+                            </button>
+
+                            <button
                                 onClick={handleLogout}
                                 className="inline-flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors text-sm font-medium px-3 py-2 rounded-lg hover:bg-red-50"
                             >
@@ -148,6 +199,68 @@ export default function Navbar() {
                     </div>
                 </div>
             )}
+            {/* Password Change Modal */}
+            {showPasswordModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold text-gray-900">비밀번호 변경</h3>
+                            <button onClick={() => { setShowPasswordModal(false); setPwdError(""); setPwdForm({ current: "", new: "", confirm: "" }); }} className="text-gray-400 hover:text-gray-600">
+                                ✕
+                            </button>
+                        </div>
+
+                        <form onSubmit={handlePasswordChange} className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">현재 비밀번호</label>
+                                <input
+                                    type="password"
+                                    required
+                                    value={pwdForm.current}
+                                    onChange={(e) => setPwdForm({ ...pwdForm, current: e.target.value })}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all outline-none"
+                                    placeholder="기존 비밀번호"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">새 비밀번호</label>
+                                <input
+                                    type="password"
+                                    required
+                                    value={pwdForm.new}
+                                    onChange={(e) => setPwdForm({ ...pwdForm, new: e.target.value })}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all outline-none"
+                                    placeholder="새 비밀번호 (6자 이상)"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">새 비밀번호 확인</label>
+                                <input
+                                    type="password"
+                                    required
+                                    value={pwdForm.confirm}
+                                    onChange={(e) => setPwdForm({ ...pwdForm, confirm: e.target.value })}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all outline-none"
+                                    placeholder="비밀번호 재입력"
+                                />
+                            </div>
+
+                            {pwdError && <p className="text-red-500 text-sm">{pwdError}</p>}
+
+                            <button
+                                type="submit"
+                                disabled={pwdLoading}
+                                className="w-full py-3 px-4 rounded-xl text-white font-medium bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                            >
+                                {pwdLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "변경하기"}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
+
