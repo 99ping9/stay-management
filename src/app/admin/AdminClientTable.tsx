@@ -58,7 +58,7 @@ export default function AdminClientTable({ initialBusinesses }: { initialBusines
                                             <input
                                                 value={editForm.name}
                                                 onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                                                className="border border-gray-300 rounded px-2 py-1 w-full outline-none focus:border-indigo-500"
+                                                className="border border-gray-300 rounded px-2 py-1 w-full outline-none focus:border-blue-500"
                                             />
                                         ) : (
                                             b.name
@@ -69,7 +69,7 @@ export default function AdminClientTable({ initialBusinesses }: { initialBusines
                                             <input
                                                 value={editForm.owner_name}
                                                 onChange={(e) => setEditForm({ ...editForm, owner_name: e.target.value })}
-                                                className="border border-gray-300 rounded px-2 py-1 w-full outline-none focus:border-indigo-500"
+                                                className="border border-gray-300 rounded px-2 py-1 w-full outline-none focus:border-blue-500"
                                             />
                                         ) : (
                                             b.owner_name
@@ -80,7 +80,7 @@ export default function AdminClientTable({ initialBusinesses }: { initialBusines
                                             <input
                                                 value={editForm.contact_phone}
                                                 onChange={(e) => setEditForm({ ...editForm, contact_phone: e.target.value })}
-                                                className="border border-gray-300 rounded px-2 py-1 w-full outline-none focus:border-indigo-500"
+                                                className="border border-gray-300 rounded px-2 py-1 w-full outline-none focus:border-blue-500"
                                             />
                                         ) : (
                                             b.contact_phone
@@ -91,7 +91,7 @@ export default function AdminClientTable({ initialBusinesses }: { initialBusines
                                             <input
                                                 value={editForm.email}
                                                 onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                                                className="border border-gray-300 rounded px-2 py-1 w-full outline-none focus:border-indigo-500"
+                                                className="border border-gray-300 rounded px-2 py-1 w-full outline-none focus:border-blue-500"
                                             />
                                         ) : (
                                             b.email
@@ -118,7 +118,7 @@ export default function AdminClientTable({ initialBusinesses }: { initialBusines
                                         ) : (
                                             <button
                                                 onClick={() => handleEdit(b)}
-                                                className="text-indigo-600 hover:text-indigo-900 bg-indigo-50 p-1.5 rounded-md hover:bg-indigo-100 transition-colors"
+                                                className="text-blue-600 hover:text-blue-900 bg-blue-50 p-1.5 rounded-md hover:bg-blue-100 transition-colors"
                                             >
                                                 <Edit2 className="w-4 h-4" />
                                             </button>

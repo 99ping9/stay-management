@@ -176,7 +176,7 @@ export default function TemplateModal({
                                                         key={v}
                                                         type="button"
                                                         onClick={() => handleTimeChange("ampm", v)}
-                                                        className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors mb-1 ${getAmPm(sendTime) === v ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-indigo-50'}`}
+                                                        className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors mb-1 ${getAmPm(sendTime) === v ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-blue-50'}`}
                                                     >
                                                         {v === "AM" ? "오전" : "오후"}
                                                     </button>
@@ -189,7 +189,7 @@ export default function TemplateModal({
                                                         key={h}
                                                         type="button"
                                                         onClick={() => handleTimeChange("hour", h.toString())}
-                                                        className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors mb-1 ${getHour12(sendTime) === h ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-indigo-50'}`}
+                                                        className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors mb-1 ${getHour12(sendTime) === h ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-blue-50'}`}
                                                     >
                                                         {h}시
                                                     </button>
@@ -202,7 +202,7 @@ export default function TemplateModal({
                                                         key={m}
                                                         type="button"
                                                         onClick={() => handleTimeChange("min", m)}
-                                                        className={`px-6 py-2 text-xs font-bold rounded-lg transition-colors mb-1 ${getMinute(sendTime) === m ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-indigo-50'}`}
+                                                        className={`px-6 py-2 text-xs font-bold rounded-lg transition-colors mb-1 ${getMinute(sendTime) === m ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-blue-50'}`}
                                                     >
                                                         {m}분
                                                     </button>
@@ -271,7 +271,7 @@ export default function TemplateModal({
                                                 textarea.selectionStart = textarea.selectionEnd = start + tag.code.length;
                                             }}
                                             className={`px-2 py-1 rounded-md text-[10px] font-bold border transition-all ${tag.primary
-                                                ? "bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-blue-100"
+                                                ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
                                                 : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                                                 }`}
                                         >
@@ -300,7 +300,7 @@ export default function TemplateModal({
                                         name="image"
                                         accept="image/*"
                                         onChange={handleImageChange}
-                                        className="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-blue-100 transition-all border border-gray-200 rounded-xl"
+                                        className="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all border border-gray-200 rounded-xl"
                                     />
                                     <p className="mt-2 text-xs text-gray-500">
                                         이미지 업로드 시 자동으로 최적화(리사이징)되어 저장됩니다. (1MB 이하 권장)
@@ -332,7 +332,7 @@ export default function TemplateModal({
                         type="submit"
                         form="templateForm"
                         disabled={loading}
-                        className="px-8 py-2.5 bg-blue-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm flex items-center min-w-[120px] justify-center"
+                        className="px-8 py-2.5 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm flex items-center min-w-[120px] justify-center"
                     >
                         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "저장"}
                     </button>

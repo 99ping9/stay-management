@@ -64,12 +64,12 @@ export default function BillingPage() {
                     <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl"></div>
                         <Sparkles className="w-10 h-10 mb-6 opacity-80" />
-                        <h2 className="text-indigo-100 text-lg font-semibold mb-1">이번 달 총 청소 횟수</h2>
+                        <h2 className="text-blue-100 text-lg font-semibold mb-1">이번 달 총 청소 횟수</h2>
                         <div className="flex items-end gap-2">
                             <span className="text-5xl font-extrabold tracking-tight">{loading ? "-" : totalCleanings}</span>
-                            <span className="text-indigo-200 text-xl font-medium mb-1">회</span>
+                            <span className="text-blue-200 text-xl font-medium mb-1">회</span>
                         </div>
-                        <p className="mt-4 text-sm text-indigo-100 opacity-90">선택된 달의 퇴실 건수 기준</p>
+                        <p className="mt-4 text-sm text-blue-100 opacity-90">선택된 달의 퇴실 건수 기준</p>
                     </div>
 
                     <div className="bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">

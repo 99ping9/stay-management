@@ -404,7 +404,7 @@ export default function AdminUsersPage() {
                                                 </button>
                                                 <button
                                                     onClick={() => handleOpenOptions(room)}
-                                                    className="p-1.5 text-gray-400 hover:text-indigo-600 transition-colors"
+                                                    className="p-1.5 text-gray-400 hover:text-blue-600 transition-colors"
                                                     title="옵션 관리"
                                                 >
                                                     <Settings className="w-4 h-4" />
@@ -473,7 +473,7 @@ export default function AdminUsersPage() {
                         <div className="flex justify-between items-center mb-6">
                             <div>
                                 <h3 className="text-xl font-bold text-gray-900">부가 옵션 설정</h3>
-                                <p className="text-sm text-indigo-600 font-semibold mt-1">{editingRoom.name}</p>
+                                <p className="text-sm text-blue-600 font-semibold mt-1">{editingRoom.name}</p>
                             </div>
                             <button onClick={() => setEditingRoom(null)} className="text-gray-400 hover:text-gray-600">
                                 <XIcon className="w-6 h-6" />
@@ -493,7 +493,7 @@ export default function AdminUsersPage() {
                                             newOpts[idx] = e.target.value;
                                             setRoomOptions(newOpts);
                                         }}
-                                        className="flex-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                                        className="flex-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
                                         placeholder="옵션 이름을 입력하세요 (예: 바베큐)"
                                     />
                                 </div>

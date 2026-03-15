@@ -199,7 +199,7 @@ export default function ReservationModal({
                         if (roomOptions.length === 0) return null;
 
                         return (
-                            <div className="p-4 bg-indigo-50/30 rounded-2xl border border-blue-100/50">
+                            <div className="p-4 bg-blue-50/30 rounded-2xl border border-blue-100/50">
                                 <label className="block text-xs font-bold text-blue-500 uppercase tracking-wider mb-3">선택 옵션 관리</label>
                                 <div className="flex flex-wrap gap-2">
                                     {roomOptions.map((opt: string) => {
@@ -218,7 +218,7 @@ export default function ReservationModal({
                                                     px-3 py-1.5 rounded-lg text-xs font-bold transition-all border
                                                     ${isSelected
                                                         ? "bg-blue-600 border-blue-600 text-white"
-                                                        : "bg-white border-gray-200 text-gray-600 hover:border-indigo-300"
+                                                        : "bg-white border-gray-200 text-gray-600 hover:border-blue-300"
                                                     }
                                                 `}
                                             >
@@ -281,7 +281,7 @@ export default function ReservationModal({
                         <button
                             type="submit"
                             disabled={isSaving}
-                            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center min-w-[124px]"
+                            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center min-w-[124px]"
                         >
                             {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : "수정 저장"}
                         </button>

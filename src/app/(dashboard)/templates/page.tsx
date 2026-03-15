@@ -231,7 +231,7 @@ export default function TemplatesPage() {
                                                         setEditingTemplate(tpl);
                                                         setIsModalOpen(true);
                                                     }}
-                                                    className="text-blue-600 hover:text-indigo-900 bg-indigo-50 p-1.5 rounded-md hover:bg-blue-100 transition-colors"
+                                                    className="text-blue-600 hover:text-blue-900 bg-blue-50 p-1.5 rounded-md hover:bg-blue-100 transition-colors"
                                                 >
                                                     <Edit2 className="w-4 h-4" />
                                                 </button>

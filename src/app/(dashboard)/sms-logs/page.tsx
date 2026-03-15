@@ -69,7 +69,7 @@ export default function SmsLogsPage() {
                 )}
                 {loading ? (
                     <div className="py-24 flex justify-center">
-                        <Loader2 className="w-8 h-8 text-indigo-500 animate-spin" />
+                        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
                     </div>
                 ) : (
                     <div className="overflow-x-auto">

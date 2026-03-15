@@ -190,7 +190,7 @@ export default function ReservationsPage() {
                             if (!selectedRoom || !selectedRoom.options || selectedRoom.options.length === 0) return null;
 
                             return (
-                                <div className="mt-8 p-6 bg-indigo-50/50 rounded-2xl border border-blue-100/50 animate-in fade-in slide-in-from-top-2 duration-300">
+                                <div className="mt-8 p-6 bg-blue-50/50 rounded-2xl border border-blue-100/50 animate-in fade-in slide-in-from-top-2 duration-300">
                                     <h4 className="text-sm font-bold text-blue-900 mb-4 flex items-center gap-2">
                                         <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
                                         추가 옵션 선택
@@ -204,8 +204,8 @@ export default function ReservationsPage() {
                                                     className={`
                                                         flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-all shadow-sm
                                                         ${isSelected
-                                                            ? "bg-blue-600 border-blue-600 text-white shadow-indigo-200"
-                                                            : "bg-white border-gray-200 text-gray-700 hover:border-indigo-300 hover:bg-gray-50"
+                                                            ? "bg-blue-600 border-blue-600 text-white shadow-blue-200"
+                                                            : "bg-white border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-gray-50"
                                                         }
                                                     `}
                                                 >
@@ -232,7 +232,7 @@ export default function ReservationsPage() {
                         <div className="mt-8 flex justify-end">
                             <button
                                 type="submit"
-                                className="inline-flex items-center justify-center px-8 py-3 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all"
+                                className="inline-flex items-center justify-center px-8 py-3 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all"
                             >
                                 예약 등록하기
                             </button>
