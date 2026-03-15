@@ -24,13 +24,13 @@ export default async function AdminPage() {
 
     return (
         <div className="min-h-screen bg-gray-50 pb-12">
-            <nav className="bg-indigo-600 shadow-md">
+            <nav className="bg-blue-600 shadow-md">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16 items-center">
                         <div className="flex items-center text-white">
-                            <span className="text-xl font-bold tracking-tight">ChowonSMS Admin</span>
+                            <span className="text-xl font-bold tracking-tight">통합숙소관리 시스템 Admin</span>
                         </div>
-                        <div className="text-indigo-100 text-sm">최고관리자 모드</div>
+                        <div className="text-blue-100 text-sm">최고관리자 모드</div>
                     </div>
                 </div>
             </nav>

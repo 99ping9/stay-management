@@ -99,7 +99,7 @@ export default function ReservationsPage() {
             <div className="relative overflow-hidden rounded-2xl bg-white/70 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/50">
                 <div className="px-6 py-6 sm:p-8">
                     <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-                        <span className="text-indigo-600 mr-2">
+                        <span className="text-blue-600 mr-2">
                             <CalendarPlus className="w-6 h-6" />
                         </span>
                         새 예약 등록
@@ -114,7 +114,7 @@ export default function ReservationsPage() {
                                     name="guest_name"
                                     value={formData.guest_name}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all"
                                     placeholder="홍길동"
                                 />
                             </div>
@@ -126,7 +126,7 @@ export default function ReservationsPage() {
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all"
                                     placeholder="01012345678"
                                     required
                                 />
@@ -138,7 +138,7 @@ export default function ReservationsPage() {
                                     name="room_id"
                                     value={formData.room_id}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all"
                                     required
                                 >
                                     {rooms.map(r => (
@@ -156,7 +156,7 @@ export default function ReservationsPage() {
                                     name="check_in"
                                     value={formData.check_in}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all text-gray-600"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all text-gray-600"
                                     required
                                 />
                             </div>
@@ -167,7 +167,7 @@ export default function ReservationsPage() {
                                     name="check_out"
                                     value={formData.check_out}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all text-gray-600"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all text-gray-600"
                                     required
                                 />
                             </div>
@@ -178,7 +178,7 @@ export default function ReservationsPage() {
                                     name="memo"
                                     value={formData.memo}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all"
                                     placeholder="특이사항 입력"
                                 />
                             </div>
@@ -190,9 +190,9 @@ export default function ReservationsPage() {
                             if (!selectedRoom || !selectedRoom.options || selectedRoom.options.length === 0) return null;
 
                             return (
-                                <div className="mt-8 p-6 bg-indigo-50/50 rounded-2xl border border-indigo-100/50 animate-in fade-in slide-in-from-top-2 duration-300">
-                                    <h4 className="text-sm font-bold text-indigo-900 mb-4 flex items-center gap-2">
-                                        <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
+                                <div className="mt-8 p-6 bg-indigo-50/50 rounded-2xl border border-blue-100/50 animate-in fade-in slide-in-from-top-2 duration-300">
+                                    <h4 className="text-sm font-bold text-blue-900 mb-4 flex items-center gap-2">
+                                        <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
                                         추가 옵션 선택
                                     </h4>
                                     <div className="flex flex-wrap gap-3">
@@ -204,7 +204,7 @@ export default function ReservationsPage() {
                                                     className={`
                                                         flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-all shadow-sm
                                                         ${isSelected
-                                                            ? "bg-indigo-600 border-indigo-600 text-white shadow-indigo-200"
+                                                            ? "bg-blue-600 border-blue-600 text-white shadow-indigo-200"
                                                             : "bg-white border-gray-200 text-gray-700 hover:border-indigo-300 hover:bg-gray-50"
                                                         }
                                                     `}
@@ -232,7 +232,7 @@ export default function ReservationsPage() {
                         <div className="mt-8 flex justify-end">
                             <button
                                 type="submit"
-                                className="inline-flex items-center justify-center px-8 py-3 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all"
+                                className="inline-flex items-center justify-center px-8 py-3 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all"
                             >
                                 예약 등록하기
                             </button>
@@ -244,14 +244,14 @@ export default function ReservationsPage() {
             {/* Room Filter */}
             <div className="relative overflow-hidden rounded-2xl bg-white/70 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/50 p-5 sm:px-8 sm:py-6">
                 <div className="flex items-center gap-2 mb-4">
-                    <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                    <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                     <h3 className="text-lg font-bold text-gray-900">숙소 필터</h3>
                 </div>
                 <div className="flex flex-wrap items-center gap-4 sm:gap-6">
                     <label className="flex items-center gap-2 cursor-pointer group">
                         <input
                             type="checkbox"
-                            className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             checked={selectedRoomFilters.length === rooms.length && rooms.length > 0}
                             onChange={(e) => {
                                 if (e.target.checked) {
@@ -261,13 +261,13 @@ export default function ReservationsPage() {
                                 }
                             }}
                         />
-                        <span className="text-sm font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors">전체 선택</span>
+                        <span className="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">전체 선택</span>
                     </label>
                     {rooms.map(room => (
                         <label key={room.id} className="flex items-center gap-2 cursor-pointer group">
                             <input
                                 type="checkbox"
-                                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                                 checked={selectedRoomFilters.includes(room.id.toString())}
                                 onChange={(e) => {
                                     if (e.target.checked) {
@@ -290,7 +290,7 @@ export default function ReservationsPage() {
             <div className="relative overflow-hidden rounded-2xl bg-white/70 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/50 p-6 sm:p-8">
                 {loading ? (
                     <div className="h-[600px] flex items-center justify-center">
-                        <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+                        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
                     </div>
                 ) : (
                     <CalendarView

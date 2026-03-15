@@ -61,7 +61,7 @@ export default function BillingPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Statistics Part */}
                 <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl"></div>
                         <Sparkles className="w-10 h-10 mb-6 opacity-80" />
                         <h2 className="text-indigo-100 text-lg font-semibold mb-1">이번 달 총 청소 횟수</h2>
@@ -74,13 +74,13 @@ export default function BillingPage() {
 
                     <div className="bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
                         <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                            <div className="w-2 h-6 bg-indigo-500 rounded-full"></div>
+                            <div className="w-2 h-6 bg-blue-500 rounded-full"></div>
                             숙소별 청소 현황
                         </h3>
                         
                         {loading ? (
                             <div className="py-10 flex justify-center">
-                                <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
+                                <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
                             </div>
                         ) : rooms.length === 0 ? (
                             <p className="text-gray-400 text-center py-10">등록된 숙소가 없습니다.</p>
@@ -107,14 +107,14 @@ export default function BillingPage() {
                 <div className="lg:col-span-2 bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 min-h-[600px]">
                     <div className="flex items-center justify-between mb-6 px-2">
                         <div className="flex items-center gap-2">
-                            <CalendarIcon className="w-5 h-5 text-indigo-500" />
+                            <CalendarIcon className="w-5 h-5 text-blue-500" />
                             <h3 className="text-xl font-bold text-gray-900">예약 및 퇴실 달력</h3>
                         </div>
                     </div>
                     
                     {loading ? (
                         <div className="h-[500px] flex items-center justify-center">
-                            <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+                            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
                         </div>
                     ) : (
                         <div className="billing-calendar-wrapper">
@@ -146,7 +146,7 @@ export default function BillingPage() {
                     background-color: #e5e7eb !important;
                 }
                 .billing-calendar-wrapper .fc .fc-button-active {
-                    background-color: #4f46e5 !important;
+                    background-color: #0e8ce4 !important;
                     color: white !important;
                 }
             `}</style>

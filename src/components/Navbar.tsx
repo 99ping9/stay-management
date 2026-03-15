@@ -77,10 +77,10 @@ export default function Navbar() {
     };
 
     const navLinks = [
-        { label: "예약/숙소 관리", href: "/reservations", color: "indigo" },
-        { label: "문자 템플릿", href: "/templates", color: "pink" },
-        { label: "문자발송내역", href: "/sms-logs", color: "green" },
-        { label: "청구내역", href: "/billing", color: "emerald" },
+        { label: "예약/숙소 관리", href: "/reservations", color: "blue" },
+        { label: "문자 템플릿", href: "/templates", color: "blue" },
+        { label: "문자발송내역", href: "/sms-logs", color: "blue" },
+        { label: "청구내역", href: "/billing", color: "blue" },
     ];
 
     return (
@@ -92,7 +92,7 @@ export default function Navbar() {
                             <div className="flex-shrink-0 flex items-center">
                                 <Link
                                     href="/"
-                                    className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-pink-600 hover:opacity-80 transition-opacity"
+                                    className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 hover:opacity-80 transition-opacity"
                                 >
                                     통합숙소관리 시스템
                                 </Link>
@@ -102,10 +102,7 @@ export default function Navbar() {
                                     const isActive = pathname.startsWith(link.href);
 
                                     // Color mapping for active states
-                                    let activeColorClass = "bg-indigo-500";
-                                    if (link.color === "pink") activeColorClass = "bg-pink-500";
-                                    if (link.color === "green") activeColorClass = "bg-green-500";
-                                    if (link.color === "emerald") activeColorClass = "bg-emerald-500";
+                                    let activeColorClass = "bg-blue-500";
 
                                     return (
                                         <Link
@@ -131,7 +128,7 @@ export default function Navbar() {
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setShowAdminLogin(true)}
-                                className="inline-flex items-center gap-2 text-gray-500 hover:text-indigo-600 transition-colors text-sm font-medium px-3 py-2 rounded-lg hover:bg-indigo-50"
+                                className="inline-flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors text-sm font-medium px-3 py-2 rounded-lg hover:bg-blue-50"
                             >
                                 <Settings className="w-4 h-4" />
                                 관리자
@@ -180,7 +177,7 @@ export default function Navbar() {
                                             verifyAdminPassword();
                                         }
                                     }}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all outline-none"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all outline-none"
                                     placeholder="비밀번호 입력"
                                     autoFocus
                                 />
@@ -218,7 +215,7 @@ export default function Navbar() {
                                     required
                                     value={pwdForm.current}
                                     onChange={(e) => setPwdForm({ ...pwdForm, current: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all outline-none"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all outline-none"
                                     placeholder="기존 비밀번호"
                                 />
                             </div>
@@ -230,7 +227,7 @@ export default function Navbar() {
                                     required
                                     value={pwdForm.new}
                                     onChange={(e) => setPwdForm({ ...pwdForm, new: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all outline-none"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all outline-none"
                                     placeholder="새 비밀번호 (6자 이상)"
                                 />
                             </div>
@@ -242,7 +239,7 @@ export default function Navbar() {
                                     required
                                     value={pwdForm.confirm}
                                     onChange={(e) => setPwdForm({ ...pwdForm, confirm: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all outline-none"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all outline-none"
                                     placeholder="비밀번호 재입력"
                                 />
                             </div>
@@ -252,7 +249,7 @@ export default function Navbar() {
                             <button
                                 type="submit"
                                 disabled={pwdLoading}
-                                className="w-full py-3 px-4 rounded-xl text-white font-medium bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                                className="w-full py-3 px-4 rounded-xl text-white font-medium bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                             >
                                 {pwdLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "변경하기"}
                             </button>

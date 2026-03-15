@@ -211,12 +211,12 @@ export default function AdminUsersPage() {
 
     return (
         <div className="min-h-screen bg-gray-50 pb-12">
-            <nav className="bg-gray-900 shadow-md">
+            <nav className="bg-blue-600 shadow-md">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16 items-center">
                         <div className="flex items-center text-white gap-2">
-                            <span className="text-xl font-bold tracking-tight">Super Admin</span>
-                            <span className="text-gray-400 text-sm hidden sm:block">| 사용자 관리</span>
+                            <span className="text-xl font-bold tracking-tight">통합숙소관리 시스템 Admin</span>
+                            <span className="text-blue-100 text-sm hidden sm:block">| 사용자 관리</span>
                         </div>
                         <button
                             onClick={() => router.push("/")}
@@ -230,7 +230,7 @@ export default function AdminUsersPage() {
 
             <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
                 <div className="mb-8 flex items-center gap-3">
-                    <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl shadow-sm">
+                    <div className="p-3 bg-blue-100 text-blue-600 rounded-xl shadow-sm">
                         <Users className="h-6 w-6" />
                     </div>
                     <div>
@@ -252,7 +252,7 @@ export default function AdminUsersPage() {
                     <div className="lg:col-span-1">
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 sticky top-6">
                             <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
-                                <Plus className="h-5 w-5 text-indigo-500" /> 신규 사용자 추가
+                                <Plus className="h-5 w-5 text-blue-500" /> 신규 사용자 추가
                             </h3>
 
                             <form onSubmit={handleCreateUser} className="space-y-5">
@@ -263,7 +263,7 @@ export default function AdminUsersPage() {
                                         required
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:border-transparent transition-all shadow-sm text-sm"
+                                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent transition-all shadow-sm text-sm"
                                         placeholder="user@example.com"
                                     />
                                 </div>
@@ -276,18 +276,18 @@ export default function AdminUsersPage() {
                                         minLength={6}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:border-transparent transition-all shadow-sm text-sm"
+                                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent transition-all shadow-sm text-sm"
                                         placeholder="최소 6자리 이상 영문/숫자"
                                     />
                                 </div>
 
                                 {formError && <p className="text-sm text-red-500 bg-red-50 p-2 rounded-lg">{formError}</p>}
-                                {formSuccess && <p className="text-sm text-indigo-700 bg-indigo-50 p-2 rounded-lg font-medium">{formSuccess}</p>}
+                                {formSuccess && <p className="text-sm text-blue-700 bg-blue-50 p-2 rounded-lg font-medium">{formSuccess}</p>}
 
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-medium transition-all focus:ring-4 focus:ring-indigo-200 flex justify-center items-center gap-2 disabled:opacity-70 shadow-md hover:shadow-lg mt-2"
+                                    className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl font-medium transition-all focus:ring-4 focus:ring-blue-100 flex justify-center items-center gap-2 disabled:opacity-70 shadow-md hover:shadow-lg mt-2"
                                 >
                                     {isSubmitting ? (
                                         <><Loader2 className="h-5 w-5 animate-spin" /> 생성 중...</>
@@ -304,7 +304,7 @@ export default function AdminUsersPage() {
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative min-h-[400px]">
                             {loading && users.length === 0 ? (
                                 <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10 backdrop-blur-sm">
-                                    <Loader2 className="animate-spin h-8 w-8 text-indigo-500" />
+                                    <Loader2 className="animate-spin h-8 w-8 text-blue-500" />
                                 </div>
                             ) : null}
 
@@ -321,10 +321,10 @@ export default function AdminUsersPage() {
                                         {users.map((user) => (
                                             <tr
                                                 key={user.id}
-                                                className="hover:bg-indigo-50/50 transition-colors cursor-pointer group"
+                                                className="hover:bg-blue-50/50 transition-colors cursor-pointer group"
                                                 onClick={() => { setSelectedUserForRooms(user); fetchUserRooms(user.id); }}
                                             >
-                                                <td className="py-4 px-6 text-sm font-semibold text-gray-900 group-hover:text-indigo-600">{user.email}</td>
+                                                <td className="py-4 px-6 text-sm font-semibold text-gray-900 group-hover:text-blue-600">{user.email}</td>
                                                 <td className="py-4 px-6 text-sm text-gray-500 font-medium">
                                                     {new Date(user.created_at).toLocaleDateString()}
                                                 </td>
@@ -351,7 +351,7 @@ export default function AdminUsersPage() {
             </main>
 
             <footer className="mt-8 py-6 text-center text-sm text-gray-400 font-medium">
-                <a href="https://www.biz-potential-consulting.com/" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-500 transition-colors">
+                <a href="https://www.biz-potential-consulting.com/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">
                     &copy; Biz-Potential-Consulting. All rights reserved.
                 </a>
             </footer>
@@ -374,7 +374,7 @@ export default function AdminUsersPage() {
                             <h4 className="text-sm font-semibold text-gray-700 mb-3">등록된 숙소</h4>
                             {isRoomsLoading ? (
                                 <div className="flex justify-center py-8">
-                                    <Loader2 className="animate-spin h-6 w-6 text-indigo-500" />
+                                    <Loader2 className="animate-spin h-6 w-6 text-blue-500" />
                                 </div>
                             ) : userRooms.length > 0 ? (
                                 <ul className="space-y-2">
@@ -384,7 +384,7 @@ export default function AdminUsersPage() {
                                                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: room.color || '#6B7280' }}></div>
                                                 {room.name}
                                                 {room.options?.length > 0 && (
-                                                    <span className="text-[10px] bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded ml-1">
+                                                    <span className="text-[10px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded ml-1">
                                                         옵션 {room.options.length}
                                                     </span>
                                                 )}
@@ -436,13 +436,13 @@ export default function AdminUsersPage() {
                                         required
                                         value={newRoomName}
                                         onChange={(e) => setNewRoomName(e.target.value)}
-                                        className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:border-transparent transition-all shadow-sm text-sm"
+                                        className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent transition-all shadow-sm text-sm"
                                         placeholder="숙소 이름"
                                     />
                                     <button
                                         type="submit"
                                         disabled={isAddingRoom || !newRoomName.trim()}
-                                        className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-medium transition-all disabled:opacity-50 shadow-sm flex items-center gap-2 whitespace-nowrap focus:ring-4 focus:ring-indigo-100"
+                                        className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl font-medium transition-all disabled:opacity-50 shadow-sm flex items-center gap-2 whitespace-nowrap focus:ring-4 focus:ring-blue-100"
                                     >
                                         {isAddingRoom ? <Loader2 className="h-4 w-4 animate-spin" /> : "추가"}
                                     </button>

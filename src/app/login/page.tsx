@@ -48,13 +48,13 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gray-50">
-            {/* Background Gradient similar to old ChowonSMS */}
-            <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--color-indigo-100)_0%,_var(--color-white)_50%,_var(--color-pink-100)_100%)] opacity-70"></div>
+        <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-50">
+            {/* Background Gradient — Blue Theme */}
+            <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--color-blue-100)_0%,_var(--color-white)_50%,_var(--color-blue-50)_100%)] opacity-70"></div>
 
             <div className="w-full max-w-md p-8 bg-white/70 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/50">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-pink-600 tracking-tight">
+                    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 tracking-tight">
                         통합숙소관리 시스템
                     </h1>
                 </div>
@@ -74,7 +74,7 @@ export default function LoginPage() {
                                 type="email"
                                 placeholder="admin@example.com"
                                 required
-                                className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-indigo-500 focus:bg-white ring-1 ring-gray-200 focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all duration-200"
+                                className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-blue-500 focus:bg-white ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all duration-200"
                             />
                         </div>
                     </div>
@@ -93,7 +93,7 @@ export default function LoginPage() {
                                 type="password"
                                 placeholder="••••••••"
                                 required
-                                className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-indigo-500 focus:bg-white ring-1 ring-gray-200 focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all duration-200"
+                                className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50/50 border-transparent focus:border-blue-500 focus:bg-white ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all duration-200"
                             />
                         </div>
                     </div>
@@ -107,7 +107,7 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         disabled={isPending}
-                        className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-pink-600 hover:from-indigo-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                        className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     >
                         {isPending ? (
                             <Loader2 className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" />
@@ -119,7 +119,7 @@ export default function LoginPage() {
                         <button
                             type="button"
                             onClick={() => setShowResetModal(true)}
-                            className="text-xs text-gray-400 hover:text-indigo-600 transition-colors font-medium"
+                            className="text-xs text-gray-400 hover:text-blue-600 transition-colors font-medium"
                         >
                             비밀번호를 잊으셨나요?
                         </button>
@@ -151,7 +151,7 @@ export default function LoginPage() {
                                             verifyAdminPassword();
                                         }
                                     }}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all outline-none"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all outline-none"
                                     placeholder="비밀번호 입력"
                                     autoFocus
                                 />
@@ -183,7 +183,7 @@ export default function LoginPage() {
                         </div>
 
                         <form onSubmit={handleResetPassword} className="space-y-4">
-                            <div className="p-3 bg-indigo-50 rounded-xl border border-indigo-100 flex gap-3 text-xs text-indigo-700 mb-2">
+                            <div className="p-3 bg-blue-50 rounded-xl border border-blue-100 flex gap-3 text-xs text-blue-700 mb-2">
                                 <Info className="w-4 h-4 flex-shrink-0" />
                                 <p>가입하신 이메일을 입력하시면 비밀번호 재설정 링크를 보내드립니다.</p>
                             </div>
@@ -195,7 +195,7 @@ export default function LoginPage() {
                                     required
                                     value={resetEmail}
                                     onChange={(e) => setResetEmail(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm transition-all outline-none"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-all outline-none"
                                     placeholder="your@email.com"
                                 />
                             </div>
@@ -230,7 +230,7 @@ export default function LoginPage() {
             </div>
 
             <footer className="absolute bottom-6 w-full text-center text-sm text-gray-500 font-medium z-30">
-                <a href="https://www.biz-potential-consulting.com/" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-500 transition-colors">
+                <a href="https://www.biz-potential-consulting.com/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">
                     &copy; Biz-Potential-Consulting. All rights reserved.
                 </a>
             </footer>

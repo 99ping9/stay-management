@@ -1,124 +1,130 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #f8fafc;
-  --foreground: #1e293b;
+  --background: #ffffff;
+  --foreground: #171717;
+  
+  /* Modern Blue Theme Palette */
+  --color-blue-50: #f0f7ff;
+  --color-blue-100: #e0effe;
+  --color-blue-200: #bae0fd;
+  --color-blue-300: #7cc7fb;
+  --color-blue-400: #38a9f8;
+  --color-blue-500: #0e8ce4;
+  --color-blue-600: #026fc4;
+  --color-blue-700: #0359a0;
+  --color-blue-800: #074b83;
+  --color-blue-900: #0c406d;
+  --color-white: #ffffff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: "Noto Sans KR", Arial, Helvetica, sans-serif;
-  --font-mono: var(--font-geist-mono);
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
-  min-height: 100vh;
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Custom Scrollbar for modern look */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Base Styles */
+h1, h2, h3, h4, h5, h6 {
+  @apply tracking-tight;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* FullCalendar Customizations */
+/* FullCalendar Custom Styling - Blue Theme */
 .fc {
-  font-family: var(--font-sans);
-  --fc-border-color: rgba(226, 232, 240, 0.6);
-  --fc-page-bg-color: transparent;
+  --fc-border-color: #f1f5f9;
+  --fc-button-bg-color: #ffffff;
+  --fc-button-border-color: #e2e8f0;
+  --fc-button-text-color: #64748b;
+  --fc-button-hover-bg-color: #f8fafc;
+  --fc-button-hover-border-color: #cbd5e1;
+  --fc-button-active-bg-color: #f1f5f9;
+  --fc-button-active-border-color: #6366f1;
+  
+  --fc-today-bg-color: rgba(14, 140, 228, 0.04);
+  font-family: inherit;
+  @apply rounded-2xl overflow-hidden border-none shadow-sm bg-white/50 backdrop-blur-sm;
 }
 
-.fc-theme-standard td,
-.fc-theme-standard th {
-  border-color: var(--fc-border-color);
+/* Calendar Header */
+.fc .fc-toolbar-title {
+  @apply text-xl font-black text-gray-900 px-2;
 }
 
-.fc-col-header-cell {
-  background-color: rgba(248, 250, 252, 0.5);
-  padding: 12px 0;
-  font-weight: 600;
-  color: #475569;
+.fc .fc-button {
+  @apply rounded-xl px-4 py-2 text-sm font-bold transition-all shadow-sm border border-gray-200 capitalize;
 }
 
-.fc-daygrid-day-number {
-  color: #64748b;
-  font-weight: 500;
-  padding: 8px;
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  @apply bg-blue-600 border-blue-600 text-white shadow-md;
 }
 
+.fc .fc-button-primary:focus {
+  @apply ring-0 outline-none;
+}
+
+/* Grid & Cells */
+.fc .fc-scrollgrid {
+  @apply rounded-2xl overflow-hidden border border-gray-100/50;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+  @apply border-gray-100/50;
+}
+
+.fc .fc-col-header-cell {
+  @apply py-4 bg-gray-50/50 text-gray-400 font-bold text-[10px] uppercase tracking-[0.2em] border-b border-gray-100;
+}
+
+.fc .fc-daygrid-day-number {
+  @apply p-3 text-sm font-bold text-gray-400;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+  @apply text-blue-600;
+}
+
+/* Events Styling */
 .fc-event {
-  border: none !important;
-  border-radius: 6px;
-  padding: 2px 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: transform 0.1s;
+  @apply border-none shadow-sm transition-all duration-300 transform rounded-lg !important;
 }
 
 .fc-event:hover {
-  transform: scale(1.02);
+  @apply scale-[1.02] shadow-md z-50 !important;
 }
 
-.fc-toolbar-title {
-  font-size: 1.5rem !important;
-  font-weight: 700;
-  color: #1e293b;
+.fc-event-main {
+  @apply p-1.5 font-bold text-xs !important;
 }
 
-.fc-button {
-  background-color: white !important;
-  border: 1px solid #e2e8f0 !important;
-  color: #475569 !important;
-  font-weight: 500 !important;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
-  text-transform: capitalize;
-  border-radius: 0.5rem !important;
+/* Custom Scrollbar for Calendar */
+.fc-scroller::-webkit-scrollbar {
+  width: 6px;
 }
 
-.fc-button:hover {
-  background-color: #f8fafc !important;
-  color: #1e293b !important;
+.fc-scroller::-webkit-scrollbar-track {
+  @apply bg-transparent;
 }
 
-.fc-button-active {
-  background-color: #eff6ff !important;
-  color: #3b82f6 !important;
-  border-color: #3b82f6 !important;
+.fc-scroller::-webkit-scrollbar-thumb {
+  @apply bg-gray-200 rounded-full hover:bg-gray-300 transition-colors;
 }
 
-.fc-day-sun {
-  background-color: #fef2f2 !important;
+/* Card Modern Effects */
+.card-shine {
+  @apply relative overflow-hidden;
 }
 
-.fc-day-sat {
-  background-color: #eff6ff !important;
-}
-
-.fc-day-sun .fc-daygrid-day-number,
-.fc-col-header-cell.fc-day-sun .fc-col-header-cell-cushion {
-  color: #ef4444 !important;
-}
-
-.fc-day-sat .fc-daygrid-day-number,
-.fc-col-header-cell.fc-day-sat .fc-col-header-cell-cushion {
-  color: #3b82f6 !important;
+.card-shine::after {
+  content: "";
+  @apply absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent pointer-events-none;
 }

@@ -128,7 +128,7 @@ export default function ReservationModal({
                 </button>
 
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">예약 상세 정보</h3>
-                <p className="text-sm text-indigo-600 font-semibold mb-6">
+                <p className="text-sm text-blue-600 font-semibold mb-6">
                     숙소: {reservation.room?.name || reservation.room_name}
                 </p>
 
@@ -141,7 +141,7 @@ export default function ReservationModal({
                                 name="guest_name"
                                 value={formData.guest_name}
                                 onChange={handleChange}
-                                className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-indigo-500 border-none transition-all"
+                                className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-blue-500 border-none transition-all"
                             />
                         </div>
                         <div>
@@ -151,7 +151,7 @@ export default function ReservationModal({
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-indigo-500 border-none transition-all"
+                                className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-blue-500 border-none transition-all"
                                 required
                             />
                         </div>
@@ -165,7 +165,7 @@ export default function ReservationModal({
                                 name="check_in"
                                 value={formData.check_in}
                                 onChange={handleChange}
-                                className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-indigo-500 border-none transition-all"
+                                className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-blue-500 border-none transition-all"
                                 required
                             />
                         </div>
@@ -176,7 +176,7 @@ export default function ReservationModal({
                                 name="check_out"
                                 value={formData.check_out}
                                 onChange={handleChange}
-                                className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-indigo-500 border-none transition-all"
+                                className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-blue-500 border-none transition-all"
                                 required
                             />
                         </div>
@@ -189,7 +189,7 @@ export default function ReservationModal({
                             rows={3}
                             value={formData.memo}
                             onChange={handleChange}
-                            className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-indigo-500 border-none transition-all resize-none"
+                            className="w-full px-4 py-2.5 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-blue-500 border-none transition-all resize-none"
                         />
                     </div>
 
@@ -199,8 +199,8 @@ export default function ReservationModal({
                         if (roomOptions.length === 0) return null;
 
                         return (
-                            <div className="p-4 bg-indigo-50/30 rounded-2xl border border-indigo-100/50">
-                                <label className="block text-xs font-bold text-indigo-500 uppercase tracking-wider mb-3">선택 옵션 관리</label>
+                            <div className="p-4 bg-indigo-50/30 rounded-2xl border border-blue-100/50">
+                                <label className="block text-xs font-bold text-blue-500 uppercase tracking-wider mb-3">선택 옵션 관리</label>
                                 <div className="flex flex-wrap gap-2">
                                     {roomOptions.map((opt: string) => {
                                         const isSelected = formData.selected_options.includes(opt);
@@ -217,7 +217,7 @@ export default function ReservationModal({
                                                 className={`
                                                     px-3 py-1.5 rounded-lg text-xs font-bold transition-all border
                                                     ${isSelected
-                                                        ? "bg-indigo-600 border-indigo-600 text-white"
+                                                        ? "bg-blue-600 border-blue-600 text-white"
                                                         : "bg-white border-gray-200 text-gray-600 hover:border-indigo-300"
                                                     }
                                                 `}
@@ -281,7 +281,7 @@ export default function ReservationModal({
                         <button
                             type="submit"
                             disabled={isSaving}
-                            className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center min-w-[124px]"
+                            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center min-w-[124px]"
                         >
                             {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : "수정 저장"}
                         </button>

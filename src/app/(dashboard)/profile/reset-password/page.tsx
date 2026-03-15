@@ -68,12 +68,12 @@ export default function ResetPasswordPage() {
             <div className="w-full max-w-lg">
                 <div className="bg-white/80 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-white p-8 sm:p-12 relative overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-500">
                     {/* Background decorations */}
-                    <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl" />
-                    <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
+                    <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
+                    <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-blue-300/5 rounded-full blur-3xl" />
                     
                     <div className="relative">
                         <div className="flex justify-center mb-8">
-                            <div className="p-4 bg-indigo-600 text-white rounded-2xl shadow-xl shadow-indigo-200">
+                            <div className="p-4 bg-blue-600 text-white rounded-2xl shadow-xl shadow-blue-200">
                                 <Sparkles className="w-8 h-8" />
                             </div>
                         </div>
@@ -85,7 +85,7 @@ export default function ResetPasswordPage() {
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">새 비밀번호</label>
                                 <div className="relative group">
-                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-500 transition-colors">
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                                         <Lock className="w-5 h-5" />
                                     </div>
                                     <input
@@ -93,7 +93,7 @@ export default function ResetPasswordPage() {
                                         required
                                         value={newPassword}
                                         onChange={(e) => setNewPassword(e.target.value)}
-                                        className="block w-full pl-12 pr-4 py-4 bg-gray-50/50 border border-transparent focus:border-indigo-500 focus:bg-white rounded-2xl text-gray-900 transition-all outline-none text-lg"
+                                        className="block w-full pl-12 pr-4 py-4 bg-gray-50/50 border border-transparent focus:border-blue-500 focus:bg-white rounded-2xl text-gray-900 transition-all outline-none text-lg"
                                         placeholder="••••••••"
                                     />
                                 </div>
@@ -102,7 +102,7 @@ export default function ResetPasswordPage() {
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">비밀번호 확인</label>
                                 <div className="relative group">
-                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-500 transition-colors">
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                                         <Lock className="w-5 h-5" />
                                     </div>
                                     <input
@@ -110,7 +110,7 @@ export default function ResetPasswordPage() {
                                         required
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
-                                        className="block w-full pl-12 pr-4 py-4 bg-gray-50/50 border border-transparent focus:border-indigo-500 focus:bg-white rounded-2xl text-gray-900 transition-all outline-none text-lg"
+                                        className="block w-full pl-12 pr-4 py-4 bg-gray-50/50 border border-transparent focus:border-blue-500 focus:bg-white rounded-2xl text-gray-900 transition-all outline-none text-lg"
                                         placeholder="••••••••"
                                     />
                                 </div>
@@ -119,7 +119,7 @@ export default function ResetPasswordPage() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-5 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white rounded-2xl font-black text-lg shadow-xl shadow-indigo-200 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3"
+                                className="w-full py-5 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3"
                             >
                                 {loading ? (
                                     <><Loader2 className="w-6 h-6 animate-spin" /> 처리 중...</>

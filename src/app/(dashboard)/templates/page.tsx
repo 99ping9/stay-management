@@ -140,7 +140,7 @@ export default function TemplatesPage() {
                         key={r.id}
                         onClick={() => handleRoomTabClick(r.id.toString())}
                         className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 whitespace-nowrap shadow-sm ${selectedRoomId === r.id.toString()
-                            ? "bg-indigo-600 text-white"
+                            ? "bg-blue-600 text-white"
                             : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
                             }`}
                     >
@@ -182,7 +182,7 @@ export default function TemplatesPage() {
 
                 {loading ? (
                     <div className="py-24 flex justify-center">
-                        <Loader2 className="w-8 h-8 text-indigo-500 animate-spin" />
+                        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
@@ -231,7 +231,7 @@ export default function TemplatesPage() {
                                                         setEditingTemplate(tpl);
                                                         setIsModalOpen(true);
                                                     }}
-                                                    className="text-indigo-600 hover:text-indigo-900 bg-indigo-50 p-1.5 rounded-md hover:bg-indigo-100 transition-colors"
+                                                    className="text-blue-600 hover:text-indigo-900 bg-indigo-50 p-1.5 rounded-md hover:bg-blue-100 transition-colors"
                                                 >
                                                     <Edit2 className="w-4 h-4" />
                                                 </button>
