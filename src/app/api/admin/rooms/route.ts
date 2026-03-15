@@ -1,5 +1,21 @@
-import { createAdminClient } from '@/lib/supabase/server';
+import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+
+function getAdminClient() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !serviceRoleKey) {
+        throw new Error('Server configuration error: Missing Supabase environment variables');
+    }
+
+    return createClient(supabaseUrl, serviceRoleKey, {
+        auth: {
+            autoRefreshToken: false,
+            persistSession: false,
+        },
+    });
+}
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -10,7 +26,7 @@ export async function GET(request: Request) {
     }
 
     try {
-        const adminSupabase = await createAdminClient();
+        const adminSupabase = getAdminClient();
         // Find business for user
         const { data: business } = await adminSupabase
             .from('businesses')
@@ -32,6 +48,7 @@ export async function GET(request: Request) {
 
         return NextResponse.json({ rooms });
     } catch (err: any) {
+        console.error('[Admin Rooms API] GET error:', err);
         return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }
@@ -44,7 +61,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'userId와 roomName은 필수입니다.' }, { status: 400 });
         }
 
-        const adminSupabase = await createAdminClient();
+        const adminSupabase = getAdminClient();
         // 1. Get or create business for the user
         let { data: business } = await adminSupabase
             .from('businesses')
@@ -85,6 +102,7 @@ export async function POST(request: Request) {
 
         return NextResponse.json({ room });
     } catch (err: any) {
+        console.error('[Admin Rooms API] POST error:', err);
         return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }
@@ -97,7 +115,7 @@ export async function PATCH(request: Request) {
             return NextResponse.json({ error: 'roomId가 필요합니다.' }, { status: 400 });
         }
 
-        const adminSupabase = await createAdminClient();
+        const adminSupabase = getAdminClient();
         const { data: room, error } = await adminSupabase
             .from('rooms')
             .update({
@@ -114,6 +132,7 @@ export async function PATCH(request: Request) {
 
         return NextResponse.json({ room });
     } catch (err: any) {
+        console.error('[Admin Rooms API] PATCH error:', err);
         return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }
@@ -127,7 +146,7 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: 'roomId 파라미터가 필요합니다.' }, { status: 400 });
         }
 
-        const adminSupabase = await createAdminClient();
+        const adminSupabase = getAdminClient();
         const { error } = await adminSupabase
             .from('rooms')
             .delete()
@@ -137,6 +156,7 @@ export async function DELETE(request: Request) {
 
         return NextResponse.json({ success: true });
     } catch (err: any) {
+        console.error('[Admin Rooms API] DELETE error:', err);
         return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }
