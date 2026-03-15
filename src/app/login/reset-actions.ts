@@ -6,16 +6,13 @@ export async function resetPasswordAction(email: string) {
     if (!email) return { error: "이메일을 입력해주세요." };
 
     const supabase = await createClient();
-    
-    // Get headers to determine the current domain
-    const { headers } = await import('next/headers');
-    const headerList = await headers();
-    const host = headerList.get('host');
-    const protocol = host?.includes('localhost') ? 'http' : 'https';
-    const baseUrl = `${protocol}://${host}`;
+
+    // NEXT_PUBLIC_APP_URL 환경변수에 실서버 URL을 설정해야 함
+    // 예: https://staymanagement.biz-potential-consulting.com
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${baseUrl}/login/callback?next=/profile/reset-password`,
+        redirectTo: `${appUrl}/login/callback?next=/profile/reset-password`,
     });
 
     if (error) {
