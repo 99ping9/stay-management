@@ -121,7 +121,21 @@ export async function GET(request: Request) {
         }
 
         const testNow = searchParams.get("test_now");
-        const now = testNow || new Date().toISOString();
+        let now: string;
+        if (testNow) {
+            // ISO 형식인데 타임존(? 또는 +)이 없으면 한국 시간(+09:00)으로 간주합니다.
+            // 사용자가 T10:00:00Z 라고 입력하면 UTC로 인식하고, T10:00:00 이라고만 하면 KST로 인식하게 합니다.
+            if (testNow.includes('T') && !testNow.includes('Z') && !testNow.includes('+')) {
+                now = new Date(`${testNow}+09:00`).toISOString();
+            } else {
+                now = testNow;
+            }
+        } else {
+            now = new Date().toISOString();
+        }
+
+        const nowKst = new Date(new Date(now).getTime() + (9 * 60 * 60 * 1000)).toISOString().replace('Z', '+09:00');
+
 
         // Fetch pending messages scheduled strictly before now
         const { data: pendingMessages, error: fetchError } = await (supabase
@@ -162,7 +176,7 @@ export async function GET(request: Request) {
         }
 
         if (!pendingMessages || pendingMessages.length === 0) {
-            return NextResponse.json({ message: "No pending messages.", checked_at: now });
+            return NextResponse.json({ message: "No pending messages.", checked_at: now, checked_at_kst: nowKst });
         }
 
         const results = [];
@@ -259,7 +273,7 @@ export async function GET(request: Request) {
             }
         }
 
-        return NextResponse.json({ processed: pendingMessages.length, results, checked_at: now });
+        return NextResponse.json({ processed: pendingMessages.length, results, checked_at: now, checked_at_kst: nowKst });
 
     } catch (error: any) {
         console.error("Cron exception:", error);

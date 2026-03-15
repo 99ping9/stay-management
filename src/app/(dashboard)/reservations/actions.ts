@@ -120,22 +120,30 @@ export async function fetchReservationDataAction() {
 
     if (!business) return { error: "업체 정보를 찾을 수 없습니다." };
 
-    const { data: rooms } = await adminSupabase
-        .from("rooms")
-        .select("*")
-        .eq("business_id", business.id);
+    // 숙소 목록과 예약 목록을 병렬로 동시에 호출하여 속도 개선
+    const [roomsRes, reservationsRes] = await Promise.all([
+        adminSupabase
+            .from("rooms")
+            .select("*")
+            .eq("business_id", business.id)
+            .order("name"),
+        adminSupabase
+            .from("reservations")
+            .select(`
+                *,
+                room:rooms(name, color, options)
+            `)
+            .eq("business_id", business.id)
+            .order("check_in", { ascending: false })
+            .limit(500) // 너무 많은 데이터를 한꺼번에 불러오는 것 방지
+    ]);
 
-    const { data: reservations } = await adminSupabase
-        .from("reservations")
-        .select(`
-            *,
-            room:rooms(name, color, options)
-        `)
-        .eq("business_id", business.id);
+    if (roomsRes.error) console.error("Rooms fetch error:", roomsRes.error);
+    if (reservationsRes.error) console.error("Reservations fetch error:", reservationsRes.error);
 
     return { 
-        rooms: rooms || [], 
-        reservations: reservations || [],
+        rooms: roomsRes.data || [], 
+        reservations: reservationsRes.data || [],
         businessId: business.id
     };
 }
