@@ -123,14 +123,15 @@ body {
 .fc-day-today .fc-daygrid-day-number {
   color: #ffffff !important;
   background-color: #3b82f6 !important;
-  border-radius: 50% !important; /* Perfect Circle */
+  border-radius: 8px !important; /* Rounded Square instead of circle */
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  width: 30px !important;
-  height: 30px !important;
+  padding: 4px 10px !important;
+  min-width: 34px !important;
+  height: 28px !important;
   margin: 6px !important;
-  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
   position: relative;
   z-index: 10;
 }

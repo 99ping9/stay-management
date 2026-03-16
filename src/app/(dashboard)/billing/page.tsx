@@ -58,71 +58,78 @@ export default function BillingPage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Statistics Part */}
-                <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl"></div>
-                        <Sparkles className="w-10 h-10 mb-6 opacity-80" />
-                        <h2 className="text-blue-100 text-lg font-semibold mb-1">이번 달 총 청소 횟수</h2>
-                        <div className="flex items-end gap-2">
-                            <span className="text-5xl font-extrabold tracking-tight">{loading ? "-" : totalCleanings}</span>
-                            <span className="text-blue-200 text-xl font-medium mb-1">회</span>
+            {/* 1. Calendar Part (Top Full Width) */}
+            <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.02)] border border-gray-100/50 min-h-[600px] relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500/20 via-blue-500 to-blue-500/20"></div>
+                <div className="flex items-center justify-between mb-8 px-2">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl shadow-sm">
+                            <CalendarIcon className="w-6 h-6" />
                         </div>
-                        <p className="mt-4 text-sm text-blue-100 opacity-90">선택된 달의 퇴실 건수 기준</p>
+                        <h3 className="text-xl font-black text-slate-900">예약 및 퇴실 달력</h3>
                     </div>
+                </div>
+                
+                {loading ? (
+                    <div className="h-[500px] flex items-center justify-center">
+                        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                    </div>
+                ) : (
+                    <div className="billing-calendar-wrapper">
+                        <CalendarView 
+                            reservations={reservations} 
+                            onEventClick={() => {}}
+                            onDatesSet={setCurrentMonth}
+                        />
+                    </div>
+                )}
+            </div>
 
-                    <div className="bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
-                        <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                            <div className="w-2 h-6 bg-blue-500 rounded-full"></div>
-                            숙소별 청소 현황
-                        </h3>
-                        
-                        {loading ? (
-                            <div className="py-10 flex justify-center">
-                                <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
-                            </div>
-                        ) : rooms.length === 0 ? (
-                            <p className="text-gray-400 text-center py-10">등록된 숙소가 없습니다.</p>
-                        ) : (
-                            <div className="space-y-5">
-                                {rooms.map(room => (
-                                    <div key={room.id} className="flex items-center justify-between group">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: room.color || '#6366f1' }}></div>
-                                            <span className="font-semibold text-gray-700 group-hover:text-gray-900 transition-colors">{room.name}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-2xl font-bold text-gray-900">{cleaningStats[room.id] || 0}</span>
-                                            <span className="text-sm text-gray-400 font-medium">회</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* 2. Total Cleaning Stats (Bottom Left) */}
+                <div className="lg:col-span-1">
+                    <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-[2.5rem] p-10 text-white shadow-2xl shadow-blue-500/20 relative overflow-hidden h-full flex flex-col justify-center">
+                        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-48 h-48 bg-white opacity-10 rounded-full blur-3xl"></div>
+                        <Sparkles className="w-12 h-12 mb-8 text-blue-200" />
+                        <h2 className="text-blue-100 text-lg font-bold mb-2">이번 달 총 청소 횟수</h2>
+                        <div className="flex items-end gap-3">
+                            <span className="text-7xl font-black tracking-tighter">{loading ? "-" : totalCleanings}</span>
+                            <span className="text-blue-200 text-2xl font-bold mb-2">회</span>
+                        </div>
+                        <div className="mt-8 flex items-center gap-2 text-sm text-blue-100/80 font-medium">
+                            <div className="w-1.5 h-1.5 bg-blue-300 rounded-full animate-pulse"></div>
+                            선택된 달의 퇴실 건수 기준
+                        </div>
                     </div>
                 </div>
 
-                {/* Calendar Part */}
-                <div className="lg:col-span-2 bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 min-h-[600px]">
-                    <div className="flex items-center justify-between mb-6 px-2">
-                        <div className="flex items-center gap-2">
-                            <CalendarIcon className="w-5 h-5 text-blue-500" />
-                            <h3 className="text-xl font-bold text-gray-900">예약 및 퇴실 달력</h3>
-                        </div>
-                    </div>
+                {/* 3. Room Stats (Bottom Right) */}
+                <div className="lg:col-span-2 bg-white rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.02)] border border-gray-100/50">
+                    <h3 className="text-2xl font-black text-slate-900 mb-10 flex items-center gap-3">
+                        <div className="w-2.5 h-8 bg-blue-500 rounded-full shadow-lg shadow-blue-500/20"></div>
+                        숙소별 청소 현황
+                    </h3>
                     
                     {loading ? (
-                        <div className="h-[500px] flex items-center justify-center">
+                        <div className="py-20 flex justify-center">
                             <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
                         </div>
+                    ) : rooms.length === 0 ? (
+                        <div className="text-gray-400 text-center py-20 font-medium italic">등록된 숙소가 없습니다.</div>
                     ) : (
-                        <div className="billing-calendar-wrapper">
-                           <CalendarView 
-                             reservations={reservations} 
-                             onEventClick={() => {}}
-                             onDatesSet={setCurrentMonth}
-                           />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8">
+                            {rooms.map(room => (
+                                <div key={room.id} className="flex items-center justify-between group p-6 rounded-3xl bg-gray-50/50 hover:bg-blue-50/50 transition-all border border-transparent hover:border-blue-100">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-3.5 h-3.5 rounded-full shadow-sm" style={{ backgroundColor: room.color || '#3b82f6' }}></div>
+                                        <span className="text-lg font-bold text-slate-700 group-hover:text-blue-700 transition-colors">{room.name}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-3xl font-black text-slate-900">{cleaningStats[room.id] || 0}</span>
+                                        <span className="text-xs text-slate-400 font-bold uppercase tracking-widest pt-2">회</span>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     )}
                 </div>
