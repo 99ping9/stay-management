@@ -21,109 +21,166 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* FullCalendar Basic Styling */
+/* --- Premium Calendar Styling --- */
 .fc {
   font-family: inherit;
   border: none !important;
+  --fc-border-color: #f1f5f9;
+  --fc-today-bg-color: transparent;
+}
+
+/* Borderless Grid Feel */
+.fc-theme-standard td, .fc-theme-standard th {
+  border: 1px solid rgba(241, 245, 249, 0.5) !important;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border: none !important;
+}
+
+/* Header Styling */
+.fc .fc-toolbar {
+  margin-bottom: 2rem !important;
+  padding: 0 0.5rem;
 }
 
 .fc .fc-toolbar-title {
-  color: #0f172a;
-  font-weight: 800;
-  font-size: 1.25rem;
+  color: #1e293b;
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -0.025em;
 }
 
+/* Buttons Styling - Clean & Modern */
 .fc .fc-button {
-  text-transform: capitalize;
-  font-weight: 600;
-  border-radius: 0.75rem !important;
-  font-size: 0.875rem;
-}
-
-.fc .fc-button-primary {
-  background-color: white !important;
+  background: #ffffff !important;
   color: #64748b !important;
   border: 1px solid #e2e8f0 !important;
-}
-
-.fc .fc-button-primary:hover {
-  background-color: #f8fafc !important;
-}
-
-.fc .fc-button-primary:not(:disabled).fc-button-active {
-  background-color: #0ea5e9 !important;
-  color: white !important;
-  border-color: #0ea5e9 !important;
-}
-
-/* Bar Style Events */
-.fc-event {
-  border-radius: 6px !important;
-  border: none !important;
-  padding: 2px 8px !important;
-  margin: 1px 2px !important;
-  font-size: 0.75rem !important;
+  padding: 0.6rem 1.2rem !important;
   font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  border-radius: 12px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  text-transform: capitalize !important;
+}
+
+.fc .fc-button:hover {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  background: #0ea5e9 !important;
+  color: #ffffff !important;
+  border-color: #0ea5e9 !important;
+  box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3) !important;
+}
+
+/* Day Headers (Sun, Mon, etc.) */
+.fc .fc-col-header-cell {
+  padding: 1.5rem 0 !important;
+  background: transparent !important;
+}
+
+.fc .fc-col-header-cell-cushion {
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  opacity: 0.8;
+}
+
+/* Individual Day Cell */
+.fc .fc-daygrid-day {
+  transition: background-color 0.2s ease;
+}
+
+.fc .fc-daygrid-day:hover {
+  background-color: rgba(241, 245, 249, 0.4);
+}
+
+.fc .fc-daygrid-day-number {
+  padding: 12px !important;
+  font-weight: 700;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+/* Today Marker - Soft Circle Style */
+.fc-day-today {
+  background-color: transparent !important;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+  color: #ffffff !important;
+  background-color: #3b82f6 !important;
+  border-radius: 50% !important; /* Perfect Circle */
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 30px !important;
+  height: 30px !important;
+  margin: 6px !important;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+  position: relative;
+  z-index: 10;
+}
+
+/* Event Bars - Pill Shape & Soft Glow */
+.fc-event {
+  border-radius: 9999px !important; /* Full Pill Shape */
+  border: none !important;
+  padding: 3px 12px !important;
+  margin: 2px 4px !important;
+  font-size: 0.7rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
   cursor: pointer !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
 }
 
 .fc-event:hover {
-  filter: brightness(0.9) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+  filter: saturate(1.2) brightness(1.1);
+  transform: scale(1.02) translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  z-index: 20 !important;
 }
 
-.fc-h-event .fc-event-title {
-  color: white !important;
+.fc-event-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 
-/* Calendar Grid */
-.fc-daygrid-day-number {
-  color: #64748b;
-  font-weight: 600;
-  font-size: 0.875rem;
-  padding: 10px !important;
+/* Modal and Other UI Animations */
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
 }
 
-.fc-day-today {
-  background-color: rgba(59, 130, 246, 0.03) !important;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Today's Date Marker - Fixed to prevent layout breakage */
-.fc-day-today .fc-daygrid-day-number {
-  color: white !important;
-  background-color: #3b82f6 !important;
-  border-radius: 8px; /* Rounded square instead of circle */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 28px;
-  height: 28px;
-  margin: 4px;
-}
-
-.fc-daygrid-bg-event {
-  opacity: 0.1 !important;
-}
-
-/* Scrollbar and Animations */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #e2e8f0;
+  background: #cbd5e1;
   border-radius: 10px;
 }
-.fade-in {
-  animation: fadeIn 0.4s ease-out;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
+::-webkit-scrollbar-track {
+  background: transparent;
 }
