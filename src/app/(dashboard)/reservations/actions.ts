@@ -106,20 +106,27 @@ async function sendSolapiMessage(to: string, from: string, text: string, subject
 }
 
 export async function fetchReservationDataAction() {
+    console.time("Performance: fetchReservationData");
     const supabase = await createClient();
     const adminSupabase = await createAdminClient();
 
+    console.time("1. auth.getUser");
     const { data: { user } } = await supabase.auth.getUser();
+    console.timeEnd("1. auth.getUser");
+
     if (!user) return { error: "로그인이 필요합니다." };
 
+    console.time("2. fetch business");
     const { data: business } = await adminSupabase
         .from("businesses")
         .select("id")
         .eq("user_id", user.id)
         .single();
+    console.timeEnd("2. fetch business");
 
     if (!business) return { error: "업체 정보를 찾을 수 없습니다." };
 
+    console.time("3. fetch rooms & reservations (Parallel)");
     // 숙소 목록과 예약 목록을 병렬로 동시에 호출하여 속도 개선
     const [roomsRes, reservationsRes] = await Promise.all([
         adminSupabase
@@ -137,10 +144,12 @@ export async function fetchReservationDataAction() {
             .order("check_in", { ascending: false })
             .limit(500) // 너무 많은 데이터를 한꺼번에 불러오는 것 방지
     ]);
+    console.timeEnd("3. fetch rooms & reservations (Parallel)");
 
     if (roomsRes.error) console.error("Rooms fetch error:", roomsRes.error);
     if (reservationsRes.error) console.error("Reservations fetch error:", reservationsRes.error);
 
+    console.timeEnd("Performance: fetchReservationData");
     return { 
         rooms: roomsRes.data || [], 
         reservations: reservationsRes.data || [],
@@ -358,5 +367,92 @@ export async function createReservationAction(formData: {
         }
     }
 
+    return { success: true };
+}
+
+export async function updateReservationAction(formData: {
+    id: number;
+    guest_name: string;
+    phone: string;
+    check_in: string;
+    check_out: string;
+    memo: string;
+    selected_options: string[];
+}) {
+    console.time("Performance: updateReservation");
+    const adminSupabase = await createAdminClient();
+
+    // 1. Update Reservation
+    const { data: reservation, error: resError } = await adminSupabase
+        .from("reservations")
+        .update({
+            guest_name: formData.guest_name,
+            phone: formData.phone.replace(/[^0-9]/g, ""),
+            check_in: formData.check_in,
+            check_out: formData.check_out,
+            memo: formData.memo,
+            selected_options: formData.selected_options,
+        })
+        .eq("id", formData.id)
+        .select()
+        .single();
+
+    if (resError || !reservation) {
+        console.timeEnd("Performance: updateReservation");
+        return { error: "예약 수정 실패: " + (resError?.message || "알 수 없는 오류") };
+    }
+
+    // 2. Remove existing PENDING messages (Already sent messages should be kept)
+    await adminSupabase
+        .from("scheduled_messages")
+        .delete()
+        .eq("reservation_id", reservation.id)
+        .eq("status", "pending");
+
+    // 3. Re-schedule messages based on new dates
+    const { data: templates } = await adminSupabase
+        .from("message_templates")
+        .select("*")
+        .eq("room_id", reservation.room_id)
+        .eq("is_active", true);
+
+    if (templates && templates.length > 0) {
+        const messagesToSchedule: any[] = [];
+        const now = new Date();
+        const checkIn = new Date(reservation.check_in);
+        const checkOut = new Date(reservation.check_out);
+
+        templates.forEach(tpl => {
+            const sendTime = tpl.send_time || "00:00:00";
+            if (tpl.trigger_type === 'checkin') {
+                const scheduledAtDate = new Date(`${reservation.check_in}T${sendTime}+09:00`);
+                if (scheduledAtDate > now) {
+                    messagesToSchedule.push({ reservation_id: reservation.id, template_id: tpl.id, scheduled_at: scheduledAtDate.toISOString(), status: 'pending' });
+                }
+            } else if (tpl.trigger_type === 'checkout') {
+                const scheduledAtDate = new Date(`${reservation.check_out}T${sendTime}+09:00`);
+                if (scheduledAtDate > now) {
+                    messagesToSchedule.push({ reservation_id: reservation.id, template_id: tpl.id, scheduled_at: scheduledAtDate.toISOString(), status: 'pending' });
+                }
+            } else if (tpl.trigger_type === 'multinight') {
+                let current = new Date(checkIn);
+                current.setDate(current.getDate() + 1);
+                while (current < checkOut) {
+                    const dateStr = current.toISOString().split('T')[0];
+                    const scheduledAtDate = new Date(`${dateStr}T${sendTime}+09:00`);
+                    if (scheduledAtDate > now) {
+                        messagesToSchedule.push({ reservation_id: reservation.id, template_id: tpl.id, scheduled_at: scheduledAtDate.toISOString(), status: 'pending' });
+                    }
+                    current.setDate(current.getDate() + 1);
+                }
+            }
+        });
+
+        if (messagesToSchedule.length > 0) {
+            await adminSupabase.from("scheduled_messages").insert(messagesToSchedule);
+        }
+    }
+
+    console.timeEnd("Performance: updateReservation");
     return { success: true };
 }

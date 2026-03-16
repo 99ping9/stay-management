@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Loader2, MessageSquare, X } from "lucide-react";
-import { sendManualSmsAction } from "./actions";
+import { sendManualSmsAction, updateReservationAction } from "./actions";
 import { useToast } from "@/components/ToastProvider";
 
 export default function ReservationModal({
@@ -65,19 +65,16 @@ export default function ReservationModal({
     const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
-        const { error } = await supabase
-            .from("reservations")
-            .update({
-                ...formData,
-                phone: formData.phone.replace(/[^0-9]/g, "")
-            })
-            .eq("id", reservation.id);
+        const res = await updateReservationAction({
+            id: reservation.id,
+            ...formData
+        });
         setIsSaving(false);
 
-        if (error) {
-            showToast("수정 실패: " + error.message, "error");
+        if (res.error) {
+            showToast("수정 실패: " + res.error, "error");
         } else {
-            showToast("예약이 수정되었습니다.", "success");
+            showToast("예약이 수정되었고, 문자 발송 일정이 재설정되었습니다.", "success");
             onUpdate();
             onClose();
         }
