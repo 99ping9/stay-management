@@ -1,12 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  
-  /* Modern Blue Theme Palette - Using Hex for stability */
+@theme {
   --color-blue-50: #f0f7ff;
   --color-blue-100: #e0effe;
   --color-blue-200: #bae0fd;
@@ -17,80 +11,94 @@
   --color-blue-700: #0359a0;
   --color-blue-800: #074b83;
   --color-blue-900: #0c406d;
-  --color-white: #ffffff;
+}
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* FullCalendar Custom Styling - Blue Theme */
+/* FullCalendar Basic Styling */
 .fc {
-  --fc-border-color: #f1f5f9;
-  --fc-button-bg-color: #ffffff;
-  --fc-button-border-color: #e2e8f0;
-  --fc-button-text-color: #64748b;
-  --fc-button-hover-bg-color: #f8fafc;
-  --fc-button-hover-border-color: #cbd5e1;
-  --fc-button-active-bg-color: #f1f5f9;
-  --fc-button-active-border-color: #0e8ce4;
-  
-  --fc-today-bg-color: rgba(14, 140, 228, 0.04);
   font-family: inherit;
-}
-
-.fc-theme-standard td, .fc-theme-standard th {
-  border-color: #f1f5f9 !important;
+  border: none !important;
 }
 
 .fc .fc-toolbar-title {
-  font-size: 1.25rem;
+  color: #0f172a;
   font-weight: 800;
-  color: #111827;
+  font-size: 1.25rem;
 }
 
-/* Calendar Button Styling */
 .fc .fc-button {
+  text-transform: capitalize;
+  font-weight: 600;
   border-radius: 0.75rem !important;
-  font-weight: 600 !important;
-  text-transform: capitalize !important;
-  transition: all 0.2s !important;
+  font-size: 0.875rem;
+}
+
+.fc .fc-button-primary {
+  background-color: white !important;
+  color: #64748b !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.fc .fc-button-primary:hover {
+  background-color: #f8fafc !important;
 }
 
 .fc .fc-button-primary:not(:disabled).fc-button-active {
-  background-color: #0e8ce4 !important;
-  border-color: #0e8ce4 !important;
+  background-color: #0ea5e9 !important;
   color: white !important;
+  border-color: #0ea5e9 !important;
 }
 
-/* Event Styling */
+/* Dots for Image 1 look */
 .fc-event {
+  background: transparent !important;
   border: none !important;
-  border-radius: 6px !important;
-  padding: 2px 4px !important;
-  font-size: 0.75rem !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  transition: transform 0.2s !important;
+  display: flex !important;
+  justify-content: center !important;
 }
 
-.fc-event:hover {
-  transform: scale(1.02) !important;
-  z-index: 10 !important;
+.dot-event {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  margin: 2px auto;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
 }
 
-/* Card Modern Effects */
-.card-shine {
-  position: relative;
-  overflow: hidden;
+.fc-daygrid-day-number {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 10px !important;
 }
 
-.card-shine::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top right, rgba(255,255,255,0.2), transparent);
-  pointer-events: none;
+.fc-day-today {
+  background-color: transparent !important;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+  color: white !important;
+  background-color: #3b82f6 !important;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin: 4px;
+}
+
+.fc-daygrid-bg-event {
+  opacity: 0.1 !important;
 }

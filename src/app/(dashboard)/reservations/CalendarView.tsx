@@ -47,13 +47,37 @@ export default function CalendarView({
                 initialView="dayGridMonth"
                 locale="ko"
                 headerToolbar={{
-                    left: "prev,next today",
+                    left: "prev,next",
                     center: "title",
-                    right: "dayGridMonth,listWeek",
+                    right: "today",
                 }}
                 events={events}
+                eventContent={(arg) => (
+                    <div 
+                        className="dot-event" 
+                        style={{ backgroundColor: arg.event.backgroundColor }}
+                        title={arg.event.title}
+                    />
+                )}
                 eventClick={(info) => {
                     onEventClick(info.event.extendedProps);
+                }}
+                dayHeaderContent={(arg) => {
+                    const days = ['일', '월', '화', '수', '목', '금', '토'];
+                    const colorClasses = [
+                        'text-red-500', // Sun
+                        'text-gray-400', // Mon
+                        'text-gray-400', // Tue
+                        'text-gray-400', // Wed
+                        'text-gray-400', // Thu
+                        'text-gray-400', // Fri
+                        'text-blue-500', // Sat
+                    ];
+                    return (
+                        <span className={`text-[11px] font-bold ${colorClasses[arg.date.getDay()]}`}>
+                            {days[arg.date.getDay()]}
+                        </span>
+                    );
                 }}
                 datesSet={(arg) => {
                     if (onDatesSet) {
