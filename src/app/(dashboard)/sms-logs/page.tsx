@@ -2,29 +2,44 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Loader2, CheckCircle2, XCircle, Clock } from "lucide-react";
-import { fetchSmsLogsAction } from "./actions";
+import { Loader2, CheckCircle2, XCircle, Clock, Trash2 } from "lucide-react";
+import { fetchSmsLogsAction, cancelSmsAction } from "./actions";
+import { useToast } from "@/components/ToastProvider";
 
 export default function SmsLogsPage() {
+    const { showToast } = useToast();
     const supabase = createClient();
     const [logs, setLogs] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        async function fetchLogs() {
-            setLoading(true);
-            setError(null);
-            const res = await fetchSmsLogsAction();
-            if (res.error) {
-                setError(res.error);
-            } else if (res.data) {
-                setLogs(res.data);
-            }
-            setLoading(false);
+    async function fetchLogs() {
+        setLoading(true);
+        setError(null);
+        const res = await fetchSmsLogsAction();
+        if (res.error) {
+            setError(res.error);
+        } else if (res.data) {
+            setLogs(res.data);
         }
+        setLoading(false);
+    }
+
+    useEffect(() => {
         fetchLogs();
     }, [supabase]);
+
+    const handleCancel = async (id: number) => {
+        if (!confirm("정말로 이 발송 예약을 취소하시겠습니까?")) return;
+        
+        const res = await cancelSmsAction(id);
+        if (res.error) {
+            showToast("취소 실패: " + res.error, "error");
+        } else {
+            showToast("발송 예약이 취소되었습니다.", "success");
+            fetchLogs(); // Refresh the list
+        }
+    };
 
     const getStatusBadge = (status: string, errorMessage?: string) => {
         switch (status) {
@@ -91,7 +106,8 @@ export default function SmsLogsPage() {
                                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">예약자 / 수신처</th>
                                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">문자 종류</th>
                                     <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">상태</th>
-                                    <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">스케줄 시간 (처리시간)</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">스케줄 시간 (처리시간)</th>
+                                    <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">관리</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-100">
@@ -120,7 +136,7 @@ export default function SmsLogsPage() {
                                         <td className="px-6 py-4 whitespace-nowrap text-center flex justify-center mt-2.5">
                                             {getStatusBadge(log.status, log.error_message)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-left text-sm text-gray-500">
                                             <div className="text-gray-900 font-medium">
                                                 {new Date(log.scheduled_at).toLocaleString('ko-KR')}
                                             </div>
@@ -128,6 +144,19 @@ export default function SmsLogsPage() {
                                                 <div className="text-xs text-gray-400 mt-1">
                                                     완료: {new Date(log.sent_at).toLocaleTimeString('ko-KR')}
                                                 </div>
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                                            {log.status === "pending" ? (
+                                                <button
+                                                    onClick={() => handleCancel(log.id)}
+                                                    className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-xl transition-all"
+                                                    title="취소하기"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            ) : (
+                                                <span className="text-gray-300">-</span>
                                             )}
                                         </td>
                                     </tr>

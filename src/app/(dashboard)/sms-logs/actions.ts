@@ -50,3 +50,17 @@ export async function fetchSmsLogsAction() {
     console.timeEnd("Performance: fetchSmsLogs");
     return { data };
 }
+
+export async function cancelSmsAction(id: number) {
+    const adminSupabase = await createAdminClient();
+
+    // Only cancel if it's still pending
+    const { error } = await adminSupabase
+        .from("scheduled_messages")
+        .delete()
+        .eq("id", id)
+        .eq("status", "pending");
+
+    if (error) return { error: error.message };
+    return { success: true };
+}
