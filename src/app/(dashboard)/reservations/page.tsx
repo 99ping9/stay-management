@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Plus, Loader2, Calendar as CalendarIcon, ClipboardList, CheckCircle2, Clock, X, MessageSquare, Trash2, Edit2 } from "lucide-react";
+import { Plus, Loader2, Calendar as CalendarIcon, ClipboardList, CheckCircle2, Clock, X, MessageSquare, Trash2, Edit2, ChevronDown } from "lucide-react";
 import CalendarView from "./CalendarView";
 import ReservationModal from "./ReservationModal";
 import { useToast } from "@/components/ToastProvider";
@@ -236,7 +236,9 @@ export default function ReservationsPage() {
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[11px] font-black text-blue-600 uppercase tracking-widest pl-1">연락처</label>
+                                        <label className="text-[11px] font-black text-blue-600 uppercase tracking-widest pl-1">
+                                            연락처 <span className="text-red-500">*</span>
+                                        </label>
                                         <input
                                             type="text"
                                             name="phone"
@@ -250,18 +252,23 @@ export default function ReservationsPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-[11px] font-black text-blue-600 uppercase tracking-widest pl-1">숙소 배정</label>
-                                    <select
-                                        name="room_id"
-                                        value={formData.room_id}
-                                        onChange={handleInputChange}
-                                        className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-900 appearance-none"
-                                        required
-                                    >
-                                        {rooms.map(r => (
-                                            <option key={r.id} value={r.id}>{r.name}</option>
-                                        ))}
-                                    </select>
+                                    <label className="text-[11px] font-black text-blue-600 uppercase tracking-widest pl-1">
+                                        숙소 배정 <span className="text-red-500">*</span>
+                                    </label>
+                                    <div className="relative group">
+                                        <select
+                                            name="room_id"
+                                            value={formData.room_id}
+                                            onChange={handleInputChange}
+                                            className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-900 appearance-none pr-12 cursor-pointer"
+                                            required
+                                        >
+                                            {rooms.map(r => (
+                                                <option key={r.id} value={r.id}>{r.name}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none group-hover:text-blue-500 transition-colors" />
+                                    </div>
                                 </div>
 
                                 {/* Dynamic Options Section */}
@@ -304,24 +311,28 @@ export default function ReservationsPage() {
 
                                 <div className="grid grid-cols-2 gap-6 pt-2">
                                     <div className="space-y-2">
-                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest pl-1">체크인</label>
+                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest pl-1">
+                                            체크인 <span className="text-red-500">*</span>
+                                        </label>
                                         <input
                                             type="date"
                                             name="check_in"
                                             value={formData.check_in}
                                             onChange={handleInputChange}
-                                            className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-blue-500 transition-all font-black"
+                                            className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-blue-500 transition-all font-black cursor-pointer"
                                             required
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest pl-1">체크아웃</label>
+                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest pl-1">
+                                            체크아웃 <span className="text-red-500">*</span>
+                                        </label>
                                         <input
                                             type="date"
                                             name="check_out"
                                             value={formData.check_out}
                                             onChange={handleInputChange}
-                                            className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-blue-500 transition-all font-black"
+                                            className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-blue-500 transition-all font-black cursor-pointer"
                                             required
                                         />
                                     </div>
