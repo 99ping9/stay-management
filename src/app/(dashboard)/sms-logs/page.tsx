@@ -77,7 +77,7 @@ export default function SmsLogsPage() {
                             <thead className="bg-gray-50/50">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">숙소명</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">예약자 / 연락처</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">예약자 / 수신처</th>
                                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">문자 종류</th>
                                     <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">상태</th>
                                     <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">스케줄 시간 (처리시간)</th>
@@ -90,8 +90,18 @@ export default function SmsLogsPage() {
                                             {log.reservation?.room?.name || "-"}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm font-bold text-gray-900">{log.reservation?.guest_name || "-"}</div>
-                                            <div className="text-sm text-gray-500">{log.reservation?.phone || "-"}</div>
+                                            {log.template?.recipient_type === 'staff' ? (
+                                                <div className="flex flex-col">
+                                                    <span className="text-xs font-black text-emerald-600 mb-1 bg-emerald-50 px-2 py-0.5 rounded w-fit italic">CLEANING STAFF</span>
+                                                    <div className="text-sm font-bold text-gray-900">{log.reservation?.guest_name} 건 청소알림</div>
+                                                    <div className="text-xs text-gray-500">등록된 모든 이모님께 발송</div>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <div className="text-sm font-bold text-gray-900">{log.reservation?.guest_name || "-"}</div>
+                                                    <div className="text-sm text-gray-500">{log.reservation?.phone || "-"}</div>
+                                                </>
+                                            )}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-gray-600">
                                             {log.template?.title || log.template?.trigger_type || "수동발송/알수없음"}

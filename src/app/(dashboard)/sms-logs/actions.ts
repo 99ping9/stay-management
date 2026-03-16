@@ -35,7 +35,7 @@ export async function fetchSmsLogsAction() {
             sent_at,
             error_message,
             reservation:reservations!inner ( guest_name, phone, business_id, room:rooms(name) ),
-            template:message_templates ( title, trigger_type )
+            template:message_templates ( title, trigger_type, recipient_type )
         `)
         .eq("reservation.business_id", business.id)
         .order("scheduled_at", { ascending: false })
