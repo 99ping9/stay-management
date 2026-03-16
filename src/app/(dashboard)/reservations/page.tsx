@@ -264,6 +264,44 @@ export default function ReservationsPage() {
                                     </select>
                                 </div>
 
+                                {/* Dynamic Options Section */}
+                                {(() => {
+                                    const selectedRoom = rooms.find(r => r.id.toString() === formData.room_id);
+                                    if (!selectedRoom || !selectedRoom.options || selectedRoom.options.length === 0) return null;
+
+                                    return (
+                                        <div className="space-y-3 pt-2">
+                                            <label className="text-[11px] font-black text-blue-600 uppercase tracking-widest pl-1">추가 옵션</label>
+                                            <div className="flex flex-wrap gap-2">
+                                                {selectedRoom.options.map((opt: string) => {
+                                                    const isSelected = formData.selected_options.includes(opt);
+                                                    return (
+                                                        <button
+                                                            key={opt}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                const newOpts = isSelected
+                                                                    ? formData.selected_options.filter(o => o !== opt)
+                                                                    : [...formData.selected_options, opt];
+                                                                setFormData({ ...formData, selected_options: newOpts });
+                                                            }}
+                                                            className={`
+                                                                px-4 py-2 rounded-xl text-xs font-bold transition-all border
+                                                                ${isSelected
+                                                                    ? "bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/20"
+                                                                    : "bg-gray-50 border-transparent text-gray-500 hover:bg-white hover:border-gray-200"
+                                                                }
+                                                            `}
+                                                        >
+                                                            {opt}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    );
+                                })()}
+
                                 <div className="grid grid-cols-2 gap-6 pt-2">
                                     <div className="space-y-2">
                                         <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest pl-1">체크인</label>

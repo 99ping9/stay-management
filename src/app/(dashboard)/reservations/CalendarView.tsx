@@ -52,13 +52,6 @@ export default function CalendarView({
                     right: "today",
                 }}
                 events={events}
-                eventContent={(arg) => (
-                    <div 
-                        className="dot-event" 
-                        style={{ backgroundColor: arg.event.backgroundColor }}
-                        title={arg.event.title}
-                    />
-                )}
                 eventClick={(info) => {
                     onEventClick(info.event.extendedProps);
                 }}

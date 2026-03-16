@@ -60,22 +60,30 @@ body {
   border-color: #0ea5e9 !important;
 }
 
-/* Dots for Image 1 look */
+/* Bar Style Events */
 .fc-event {
-  background: transparent !important;
+  border-radius: 6px !important;
   border: none !important;
-  display: flex !important;
-  justify-content: center !important;
+  padding: 2px 8px !important;
+  margin: 1px 2px !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
 }
 
-.dot-event {
-  width: 6px;
-  height: 6px;
-  border-radius: 9999px;
-  margin: 2px auto;
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+.fc-event:hover {
+  filter: brightness(0.9) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
 }
 
+.fc-h-event .fc-event-title {
+  color: white !important;
+}
+
+/* Calendar Grid */
 .fc-daygrid-day-number {
   color: #64748b;
   font-weight: 600;
@@ -84,21 +92,38 @@ body {
 }
 
 .fc-day-today {
-  background-color: transparent !important;
+  background-color: rgba(59, 130, 246, 0.03) !important;
 }
 
+/* Today's Date Marker - Fixed to prevent layout breakage */
 .fc-day-today .fc-daygrid-day-number {
   color: white !important;
   background-color: #3b82f6 !important;
-  border-radius: 9999px;
+  border-radius: 8px; /* Rounded square instead of circle */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  min-width: 28px;
+  height: 28px;
   margin: 4px;
 }
 
 .fc-daygrid-bg-event {
   opacity: 0.1 !important;
+}
+
+/* Scrollbar and Animations */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
