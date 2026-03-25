@@ -116,10 +116,10 @@ export default function ReservationModal({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl animate-in fade-in zoom-in-95 duration-200 border border-gray-100 relative">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 max-w-lg w-full shadow-2xl animate-in fade-in zoom-in-95 duration-200 border border-gray-100 relative max-h-[90vh] overflow-y-auto">
                 <button
                     onClick={onClose}
-                    className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute top-4 right-4 sm:top-6 sm:right-6 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                     <X className="w-6 h-6" />
                 </button>
@@ -130,7 +130,7 @@ export default function ReservationModal({
                 </p>
 
                 <form onSubmit={handleUpdate} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">예약자 이름</label>
                             <input
@@ -154,7 +154,7 @@ export default function ReservationModal({
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">입실일</label>
                             <input

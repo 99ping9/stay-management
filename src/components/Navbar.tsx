@@ -92,7 +92,7 @@ export default function Navbar() {
                             <div className="flex-shrink-0 flex items-center">
                                 <Link
                                     href="/"
-                                    className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 hover:opacity-80 transition-opacity"
+                                    className="text-lg sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 hover:opacity-80 transition-opacity truncate max-w-[200px] sm:max-w-none"
                                 >
                                     통합숙소관리 시스템
                                 </Link>
@@ -125,28 +125,28 @@ export default function Navbar() {
                                 })}
                             </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2">
                             <button
                                 onClick={() => setShowAdminLogin(true)}
-                                className="inline-flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors text-sm font-medium px-3 py-2 rounded-lg hover:bg-blue-50"
+                                className="inline-flex items-center gap-1 sm:gap-2 text-gray-500 hover:text-blue-600 transition-colors text-sm font-medium p-2 sm:px-3 sm:py-2 rounded-lg hover:bg-blue-50"
                             >
-                                <Settings className="w-4 h-4" />
-                                관리자
+                                <Settings className="w-5 h-5 sm:w-4 sm:h-4" />
+                                <span className="hidden sm:inline">관리자</span>
                             </button>
                             <button
                                 onClick={() => setShowPasswordModal(true)}
-                                className="inline-flex items-center gap-2 text-gray-500 hover:text-amber-600 transition-colors text-sm font-medium px-3 py-2 rounded-lg hover:bg-amber-50"
+                                className="inline-flex items-center gap-1 sm:gap-2 text-gray-500 hover:text-amber-600 transition-colors text-sm font-medium p-2 sm:px-3 sm:py-2 rounded-lg hover:bg-amber-50"
                             >
-                                <Key className="w-4 h-4" />
-                                비밀번호 변경
+                                <Key className="w-5 h-5 sm:w-4 sm:h-4" />
+                                <span className="hidden sm:inline">비밀번호 변경</span>
                             </button>
 
                             <button
                                 onClick={handleLogout}
-                                className="inline-flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors text-sm font-medium px-3 py-2 rounded-lg hover:bg-red-50"
+                                className="inline-flex items-center gap-1 sm:gap-2 text-gray-500 hover:text-red-500 transition-colors text-sm font-medium p-2 sm:px-3 sm:py-2 rounded-lg hover:bg-red-50"
                             >
-                                <LogOut className="w-4 h-4" />
-                                로그아웃
+                                <LogOut className="w-5 h-5 sm:w-4 sm:h-4" />
+                                <span className="hidden sm:inline">로그아웃</span>
                             </button>
                         </div>
                     </div>

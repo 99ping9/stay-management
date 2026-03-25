@@ -1,0 +1,72 @@
+{
+  "users": [
+    {
+      "id": "5d119628-fcbd-4aae-8ec9-2c5de53b915e",
+      "username": "이수영",
+      "created_at": "2026-02-10T12:41:37.263978+00:00",
+      "avatar": "🐕",
+      "bg_color": "bg-slate-100",
+      "is_column_challenge": true
+    },
+    {
+      "id": "1a7b802d-8ba7-406f-b46e-3948cc90e9b4",
+      "username": "공승현",
+      "created_at": "2026-02-20T10:29:26.450412+00:00",
+      "avatar": null,
+      "bg_color": null,
+      "is_column_challenge": false
+    },
+    {
+      "id": "2ca92676-b1b1-469e-ad7e-37c4cf2374e0",
+      "username": "강현준",
+      "created_at": "2026-02-20T10:29:20.062815+00:00",
+      "avatar": null,
+      "bg_color": null,
+      "is_column_challenge": true
+    },
+    {
+      "id": "13935607-766c-4909-97f0-626260f11030",
+      "username": "윤현구",
+      "created_at": "2026-02-10T12:26:35.458096+00:00",
+      "avatar": "🐧",
+      "bg_color": "bg-yellow-100",
+      "is_column_challenge": true
+    },
+    {
+      "id": "da07c88e-457a-4389-ab92-7f94b6dd8399",
+      "username": "이가영",
+      "created_at": "2026-03-08T14:34:33.721557+00:00",
+      "avatar": null,
+      "bg_color": null,
+      "is_column_challenge": false
+    },
+    {
+      "id": "0af5ccd4-d269-48d0-94b4-1b9eb525d92c",
+      "username": "김상일",
+      "created_at": "2026-02-20T10:29:34.880499+00:00",
+      "avatar": null,
+      "bg_color": null,
+      "is_column_challenge": true
+    },
+    {
+      "id": "cce06f6f-1c7e-428d-ba69-2d89ed0e838f",
+      "username": "유승현",
+      "created_at": "2026-02-20T10:29:40.920097+00:00",
+      "avatar": null,
+      "bg_color": null,
+      "is_column_challenge": true
+    }
+  ],
+  "profiles": {
+    "error": "Could not find the table 'public.profiles' in the schema cache"
+  },
+  "admin": {
+    "error": "Could not find the table 'public.admin' in the schema cache"
+  },
+  "admins": {
+    "error": "Could not find the table 'public.admins' in the schema cache"
+  },
+  "managers": {
+    "error": "Could not find the table 'public.managers' in the schema cache"
+  }
+}

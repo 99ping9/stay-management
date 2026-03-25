@@ -185,3 +185,34 @@ body {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* --- Mobile Responsiveness Enhancements --- */
+@media (max-width: 640px) {
+  .fc .fc-toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-between;
+    margin-bottom: 1rem !important;
+  }
+  .fc .fc-toolbar-title {
+    font-size: 1.1rem !important;
+  }
+  .fc .fc-button {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.7rem !important;
+  }
+  .fc-direction-ltr .fc-toolbar-chunk:first-child {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .fc-direction-ltr .fc-toolbar-chunk:last-child {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .fc-direction-ltr .fc-toolbar-chunk:nth-child(2) {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    order: -1;
+  }
+}
